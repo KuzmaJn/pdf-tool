@@ -2,18 +2,53 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+//use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model
+class User extends Authenticatable
 {
-    protected $primaryKey = 'user_id';
+//    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
-        'hashed_pass',
+        'email',
+        'password',
         'api_key',
         'is_admin',
     ];
 
-    protected $hidden = ['hashed_pass'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'api_key',
+        'is_admin',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
+    ];
 }
+
+//
+//namespace App\Models;
+//
+//use Illuminate\Database\Eloquent\Model;
+//
+//class User extends Model
+//{
+//    protected $primaryKey = 'user_id';
+//
+//    protected $fillable = [
+//        'name',
+//        'hashed_pass',
+//        'api_key',
+//        'is_admin',
+//    ];
+//
+//    protected $hidden = ['hashed_pass'];
+//}

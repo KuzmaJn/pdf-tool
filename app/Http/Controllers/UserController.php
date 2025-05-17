@@ -24,14 +24,16 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string',
             'is_admin' => 'boolean',
         ]);
 
         $user = User::create([
             'name' => $validated['name'],
-            'hashed_pass' => Hash::make($validated['password']),
-            'api_key' => Str::random(60),
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'api_key' => bin2hex(random_bytes(30)), // Secure API key generation
             'is_admin' => $validated['is_admin'] ?? false,
         ]);
 
@@ -43,7 +45,8 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         if ($request->has('name')) $user->name = $request->name;
-        if ($request->has('password')) $user->hashed_pass = Hash::make($request->password);
+        if ($request->has('email')) $user->email = $request->email;
+        if ($request->has('password')) $user->password = Hash::make($request->password);
         if ($request->has('is_admin')) $user->is_admin = $request->is_admin;
 
         $user->save();
