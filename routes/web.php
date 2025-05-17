@@ -3,10 +3,14 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfToolsController;
+use App\Http\Controllers\PdfApiController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+
+Route::post('pdf/merge', [PdfApiController::class, 'merge'])->name('pdf.merge');
+
 
 
 Route::get('/pdf-tools', [PdfToolsController::class, 'index'])->name('pdf.tools');
