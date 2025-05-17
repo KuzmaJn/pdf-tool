@@ -49,15 +49,6 @@
   </form>
   <div id="output"></div>
 
-  {{-- @if(session('outputPath'))
-    <div class="output">
-      <div>Output PDF ready:</div>
-      <a href="{{ route('pdf.download', ['filename' => $outputName]) }}">Stiahnuť PDF</a>
-      <div>Or download it directly:</div>
-      <a href="{{ route('pdf.download', ['path' => session('outputPath')]) }}" class="download-btn">Download PDF</a>
-    </div>
-  @endif --}}
-  
 </div>
 <script>
   const tiles = document.querySelectorAll('.tile');
@@ -135,9 +126,18 @@
     if (response.ok) {
       const data = await response.json();
       console.log('Úspech: ' + JSON.stringify(data));
-      // Tu môžeš zobraziť výsledok na stránke
+      if (data.status === 'success') {
+        document.getElementById('output').innerHTML =
+          `<div class="output">
+            <a href="${data.merged_file}" class="download-btn" download>Stiahnuť PDF</a>
+          </div>`;
+      } else {
+        document.getElementById('output').innerHTML =
+          `<div class="output">Chyba: ${data.message ?? 'Neznáma chyba'}</div>`;
+      }
     } else {
-      console.log('Chyba: ' + response.status);
+      document.getElementById('output').innerHTML =
+        `<div class="output">Chyba: ${response.status}</div>`;
     }
   });
 

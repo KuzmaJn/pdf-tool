@@ -46,9 +46,16 @@ class PdfApiController extends Controller
             ], 500);
         }
 
+        // Odstránenie dočasných súborov po zlúčení
+        Storage::disk('public')->delete("tmp/{$pdf1Name}");
+        Storage::disk('public')->delete("tmp/{$pdf2Name}");
+
+        // Uloženie zlúčeného PDF do storage/output
+        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
+
         return response()->json([
             'status' => 'success',
-            'merged_file' => asset("/storage/output/{$outputName}")
+            'merged_file' => asset("storage/output/{$outputName}")
         ]);
     }
 
