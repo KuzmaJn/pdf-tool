@@ -1,58 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PDF Tool</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
-        .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
-        .tile {
-            flex: 1 1 calc(20% - 12px);
-            min-width: 120px;
-            background: #e0e0e0;
-            padding: 15px 10px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .tile:hover { background: #d0d0d0; }
-        .tile.active { background: #1976d2; color: #fff; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; }
-        input[type="text"],
-        input[type="number"],
-        input[type="password"],
-        input[type="file"],
-        select,
-        textarea {
-            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button[type="submit"]:disabled { background: #aaa; cursor: not-allowed; }
-        button[type="submit"] {
-            background: #1976d2; color: #fff; border: none; padding: 12px 24px;
-            border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
-            transition: background 0.2s;
-        }
-        button[type="submit"]:hover { background: #1565c0; }
-        .output { margin-top: 24px; padding: 16px; background: #e8f5e9; border-radius: 6px; text-align: center; }
-        .download-btn {
-            background: #388e3c; color: #fff; border: none; padding: 10px 20px;
-            border-radius: 4px; cursor: pointer; margin-top: 8px; text-decoration: none;
-            display: inline-block;
-        }
-        .download-btn:hover { background: #2e7d32; }
-        .range-inputs { display: flex; gap: 10px; }
-        .range-inputs input { flex: 1; }
-        .file-preview { margin-top: 10px; max-width: 100%; }
-    </style>
-</head>
-<body>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+    .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .tile {
+        flex: 1 1 calc(20% - 12px);
+        min-width: 120px;
+        background: #e0e0e0;
+        padding: 15px 10px;
+        text-align: center;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .tile:hover { background: #d0d0d0; }
+    .tile.active { background: #1976d2; color: #fff; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button[type="submit"]:disabled { background: #aaa; cursor: not-allowed; }
+    button[type="submit"] {
+        background: #1976d2; color: #fff; border: none; padding: 12px 24px;
+        border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
+        transition: background 0.2s;
+    }
+    button[type="submit"]:hover { background: #1565c0; }
+    .output { margin-top: 24px; padding: 16px; background: #e8f5e9; border-radius: 6px; text-align: center; }
+    .download-btn {
+        background: #388e3c; color: #fff; border: none; padding: 10px 20px;
+        border-radius: 4px; cursor: pointer; margin-top: 8px; text-decoration: none;
+        display: inline-block;
+    }
+    .download-btn:hover { background: #2e7d32; }
+    .range-inputs { display: flex; gap: 10px; }
+    .range-inputs input { flex: 1; }
+    .file-preview { margin-top: 10px; max-width: 100%; }
+</style>
+
+
+<x-app-layout>
+
 <div class="container">
     <h2>PDF Tool</h2>
     <div class="tiles">
@@ -282,5 +278,5 @@
     // Initial render
     renderInputs('merge');
 </script>
-</body>
-</html>
+
+</x-app-layout>
