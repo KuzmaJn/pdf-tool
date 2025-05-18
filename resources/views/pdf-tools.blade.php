@@ -52,6 +52,7 @@
         .file-preview { margin-top: 10px; max-width: 100%; }
     </style>
 </head>
+<x-app-layout>
 <body>
 <div class="container">
     <h2>PDF Tool</h2>
@@ -283,4 +284,5 @@
     renderInputs('merge');
 </script>
 </body>
+</x-app-layout>
 </html>
