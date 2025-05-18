@@ -8,6 +8,6 @@ class PdfToolsController extends Controller
 {
     public function index()
     {
-        return view('pdf-tools');
+        return view('pdf-tools.index');
     }
 }
