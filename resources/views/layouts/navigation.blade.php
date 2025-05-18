@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('pdf.tools') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
@@ -13,13 +13,13 @@
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('pdf.tools')" :active="request()->routeIs('pdf.tools')">
-                        {{ __('Tools') }}
+                        {{ __('PDF Tools') }}
                     </x-nav-link>
-                </div>
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-{{--                    <x-nav-link :href="route('history')" :active="request()->routeIs('history')">--}}
-{{--                        {{ __('History') }}--}}
-{{--                    </x-nav-link>--}}
+                    @if (Auth::user()->is_admin)
+                        <x-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
+                        {{ __('History') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -73,11 +73,13 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('pdf.tools')" :active="request()->routeIs('pdf.tools')">
-                {{ __('Tools') }}
+                {{ __('PDF Tools') }}
             </x-responsive-nav-link>
-{{--            <x-responsive-nav-link :href="route('history')" :active="request()->routeIs('history')">--}}
-{{--                {{ __('History') }}--}}
-{{--            </x-responsive-nav-link>--}}
+            @if (Auth::user()->is_admin)
+                <x-responsive-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
+                    {{ __('History') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
