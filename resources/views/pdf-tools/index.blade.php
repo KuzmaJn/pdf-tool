@@ -1,58 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>PDF Tool</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
-        .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
-        .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
-        .tile {
-            flex: 1 1 calc(20% - 12px);
-            min-width: 120px;
-            background: #e0e0e0;
-            padding: 15px 10px;
-            text-align: center;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .tile:hover { background: #d0d0d0; }
-        .tile.active { background: #1976d2; color: #fff; }
-        .form-group { margin-bottom: 16px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; }
-        input[type="text"],
-        input[type="number"],
-        input[type="password"],
-        input[type="file"],
-        select,
-        textarea {
-            width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button[type="submit"]:disabled { background: #aaa; cursor: not-allowed; }
-        button[type="submit"] {
-            background: #1976d2; color: #fff; border: none; padding: 12px 24px;
-            border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
-            transition: background 0.2s;
-        }
-        button[type="submit"]:hover { background: #1565c0; }
-        .output { margin-top: 24px; padding: 16px; background: #e8f5e9; border-radius: 6px; text-align: center; }
-        .download-btn {
-            background: #388e3c; color: #fff; border: none; padding: 10px 20px;
-            border-radius: 4px; cursor: pointer; margin-top: 8px; text-decoration: none;
-            display: inline-block;
-        }
-        .download-btn:hover { background: #2e7d32; }
-        .range-inputs { display: flex; gap: 10px; }
-        .range-inputs input { flex: 1; }
-        .file-preview { margin-top: 10px; max-width: 100%; }
-    </style>
-</head>
-<body>
+<x-app-layout>
+<style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 0; }
+    .container { max-width: 800px; margin: 40px auto; background: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 2px 8px #ccc; }
+    .tiles { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+    .tile {
+        flex: 1 1 calc(20% - 12px);
+        min-width: 120px;
+        background: #e0e0e0;
+        padding: 15px 10px;
+        text-align: center;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    .tile:hover { background: #d0d0d0; }
+    .tile.active { background: #1976d2; color: #fff; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: bold; }
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="file"],
+    select,
+    textarea {
+        width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
+        box-sizing: border-box;
+    }
+    button[type="submit"]:disabled { background: #aaa; cursor: not-allowed; }
+    button[type="submit"] {
+        background: #1976d2; color: #fff; border: none; padding: 12px 24px;
+        border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
+        transition: background 0.2s;
+    }
+    button[type="submit"]:hover { background: #1565c0; }
+    .output { margin-top: 24px; padding: 16px; background: #e8f5e9; border-radius: 6px; text-align: center; }
+    .download-btn {
+        background: #388e3c; color: #fff; border: none; padding: 10px 20px;
+        border-radius: 4px; cursor: pointer; margin-top: 8px; text-decoration: none;
+        display: inline-block;
+    }
+    .download-btn:hover { background: #2e7d32; }
+    .range-inputs { display: flex; gap: 10px; }
+    .range-inputs input { flex: 1; }
+    .file-preview { margin-top: 10px; max-width: 100%; }
+</style>
+
 <div class="container">
     <h2>PDF Tool</h2>
     <div class="tiles">
@@ -68,7 +62,7 @@
         <div class="tile" data-action="jpg2pdf">JPG to PDF</div>
     </div>
 
-    <form id="pdfForm" method="POST" action="/api/pdf/process" enctype="multipart/form-data">
+    <form id="pdfForm" method="POST" action="#" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="action" id="actionInput" value="merge">
         <div id="inputsArea">
@@ -77,12 +71,7 @@
         <button type="submit" id="submitBtn" disabled>Process</button>
     </form>
 
-    @if(session('outputPath'))
-        <div class="output">
-            <div>Output ready:</div>
-            <a href="{{ route('pdf.download', ['path' => session('outputPath')]) }}" class="download-btn">Download</a>
-        </div>
-    @endif
+    <div id="output"></div>
 </div>
 
 <script>
@@ -92,15 +81,17 @@
     const submitBtn = document.getElementById('submitBtn');
 
     const inputTemplates = {
+        tmpOutputNameFile: `
+            <div class="form-group">
+                <label for="output_name">Output File Name</label>
+                <input type="text" id="output_name" name="output_name" value="merged.pdf" required>
+            </div>
+        `,
         merge: `
             <div class="form-group">
                 <label for="pdf_files">PDF Files to Merge</label>
                 <input type="file" id="pdf_files" name="pdf_files[]" accept="application/pdf" required multiple>
                 <small>Select multiple PDF files to merge</small>
-            </div>
-            <div class="form-group">
-                <label for="output_name">Output File Name</label>
-                <input type="text" id="output_name" name="output_name" value="merged.pdf" required>
             </div>
         `,
         split: `
@@ -233,8 +224,14 @@
 
         // Add event listeners to all inputs
         Array.from(inputsArea.querySelectorAll('input, select, textarea')).forEach(input => {
-            input.addEventListener('input', checkInputs);
-            input.addEventListener('change', checkInputs);
+            input.addEventListener('input', function() {
+                checkInputs();
+                clearOutput();
+            });
+            input.addEventListener('change', function() {
+                checkInputs();
+                clearOutput();
+            });
         });
 
         // Special handling for split options
@@ -276,11 +273,50 @@
             const action = this.getAttribute('data-action');
             actionInput.value = action;
             renderInputs(action);
+            clearOutput();
         });
+    });
+
+    function clearOutput() {
+        document.getElementById('output').innerHTML = '';
+    }
+
+    // Handle form submission
+    document.getElementById('pdfForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('Form data:', new FormData(this));
+        console.log('Action:', actionInput.value);
+        const formData = new FormData(this);
+        const action = actionInput.value;
+        let url = '/pdf/' + action;
+
+        const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+        });
+
+        if (response.ok) {
+        const data = await response.json();
+        console.log('Úspech: ' + JSON.stringify(data));
+        if (data.status === 'success') {
+            document.getElementById('output').innerHTML =
+            `<div class="output">
+                <a href="${data.merged_file}" class="download-btn" download>Stiahnuť PDF</a>
+            </div>`;
+        } else {
+            document.getElementById('output').innerHTML =
+            `<div class="output" style="background-color: #dc3545;">Chyba: ${data.message ?? 'Neznáma chyba'}</div>`;
+        }
+        } else {
+        document.getElementById('output').innerHTML =
+            `<div class="output" style="background-color: #dc3545;">Chyba: ${response.status}</div>`;
+        }
     });
 
     // Initial render
     renderInputs('merge');
 </script>
-</body>
-</html>
+</x-app-layout>

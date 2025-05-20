@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\ApiKeyController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PdfToolsController;
+
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -13,12 +14,12 @@ use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\UserManualController;
 
 
 Route::get('/', function () {
     return view('welcome');
 });
-
 
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
@@ -74,13 +75,34 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/pdf-tools', [PdfToolsController::class, 'index'])->name('pdf.tools');
-
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/použivateľská-príručka', [UserManualController::class, 'index'])->name('manual');
+    Route::get('/používateľská-príručka/stiahnut', [UserManualController::class, 'downloadPdf'])
+        ->name('manual.download');
+
+    Route::get('/pdf-tools', [PdfToolsController::class, 'index'])->name('pdf-tools');
+
+    Route::prefix('pdf')->controller(PdfToolsController::class)->group(function () {
+        Route::post('/merge', 'merge')->name('pdf.merge');
+        Route::post('/split', 'split')->name('pdf.split');
+        Route::post('/remove-page', 'removePage')->name('pdf.removePage');
+        // Pridávaj ďalšie PDF operácie tu...
+    });
+});
+
+use App\Http\Controllers\HistoryController;
+
+Route::middleware(['auth', 'admin'])->prefix('history')->group(function () {
+    Route::get('/', [HistoryController::class, 'index'])->name('history.index');
+    Route::post('/export', [HistoryController::class, 'export'])->name('history.export');
+    Route::delete('/destroy-all', [HistoryController::class, 'destroyAll'])->name('history.destroyAll');
 });
