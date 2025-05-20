@@ -57,7 +57,7 @@
         <div class="tile" data-action="rotate">Rotate Page</div>
         <div class="tile" data-action="removePage">Remove Page</div>
         <div class="tile" data-action="extract">Extract Page</div>
-        <div class="tile" data-action="pagenumber">Add Page Numbers</div>
+        <div class="tile" data-action="pageNumber">Add Page Numbers</div>
         <div class="tile" data-action="create">Create PDF</div>
         <div class="tile" data-action="pdf2word">PDF to Word</div>
         <div class="tile" data-action="jpg2pdf">JPG to PDF</div>
@@ -163,7 +163,7 @@
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
         `,
-        pagenumber: `
+        pageNumber: `
             <div class="form-group">
                 <label for="pdf">PDF File to Number</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>

@@ -3,22 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;  // Toto je kritický import
 use Illuminate\Support\Facades\Storage;
-//use Illuminate\Support\Facades\Http;
-//use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class PdfToolsController extends Controller
 {
-    //INDEX
+
     public function index()
     {
         return view('pdf-tools.index');
     }
 
-    // AUXILIARY FUNCTIONS
     function extractPythonError($text) {
         if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
             return trim($matches[1]);
@@ -44,8 +42,6 @@ class PdfToolsController extends Controller
         }
     }
 
-    //
-    // MERGE
     public function merge(Request $request)
     {
         // Validácia na pole PDF súborov
@@ -99,304 +95,133 @@ class PdfToolsController extends Controller
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('merge', $location);
-
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
         ]);
     }
 
-    //
-    // SPLIT
+
     public function split(Request $request) {
-        // Validácia vstupu
-        $request->validate([
-            'pdf' => 'required|file|mimes:pdf',
-            'split_page' => 'required|integer|min:1'
-        ]);
+    // Validácia vstupu
+    $request->validate([
+        'pdf' => 'required|file|mimes:pdf',
+        'split_page' => 'required|integer|min:1'
+    ]);
 
-        // Uloženie PDF do temp adresára
-        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'split');
+    // Uloženie PDF do temp adresára
+    $pdfPath = $this->saveTmpFile($request->file('pdf'), 'split');
 
-        // Over a prípadne vytvor priečinok output v storage/app/public
-        $this->ensureOutputDirExists();
+    // Over a prípadne vytvor priečinok output v storage/app/public
+    $this->ensureOutputDirExists();
 
-        // Výstupné súbory
-        $outputName1 = 'split1_' . Str::uuid() . '.pdf';
-        $outputName2 = 'split2_' . Str::uuid() . '.pdf';
-        $outputPath1 = storage_path("app/public/output/{$outputName1}");
-        $outputPath2 = storage_path("app/public/output/{$outputName2}");
+    // Výstupné súbory
+    $outputName1 = 'split1_' . Str::uuid() . '.pdf';
+    $outputName2 = 'split2_' . Str::uuid() . '.pdf';
+    $outputPath1 = storage_path("app/public/output/{$outputName1}");
+    $outputPath2 = storage_path("app/public/output/{$outputName2}");
 
-        // Priprav argumenty pre python: vstup, split_page, výstupy
-        $pythonArgs = [
-            'python3', base_path('python/split.py'),
-            $pdfPath,
-            $request->input('split_page'),
-            $outputPath1,
-            $outputPath2
-        ];
+    // Priprav argumenty pre python: vstup, split_page, výstupy
+    $pythonArgs = [
+        'python3', base_path('python/split.py'),
+        $pdfPath,
+        $request->input('split_page'),
+        $outputPath1,
+        $outputPath2
+    ];
 
-        $process = new Process($pythonArgs);
+    $process = new Process($pythonArgs);
 
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $exception) {
-            $this->cleanFiles([$pdfPath]);
-            
-            function extractPythonError($text) {
-                if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
-                    return trim($matches[1]);
-                }
-                return $text;
+    try {
+        $process->mustRun();
+    } catch (ProcessFailedException $exception) {
+        $this->cleanFiles([$pdfPath]);
+
+        function extractPythonError($text) {
+            if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
+                return trim($matches[1]);
             }
-
-            $fullError = $exception->getMessage();
-            $cleanError = extractPythonError($fullError);
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Split failed',
-                'error' => $fullError,
-                'cleanError' => $cleanError
-            ], 500);
+            return $text;
         }
 
-        // Vymaž dočasný PDF
-        $this->cleanFiles([$pdfPath]);
-
-        // Ulož výstupy do storage/output
-        Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
-        Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
-
-        // Uloženie do histórie
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('split', $location);
+        $fullError = $exception->getMessage();
+        $cleanError = extractPythonError($fullError);
 
         return response()->json([
-            'status' => 'success',
-            'processed_files' => [
-                asset("storage/output/{$outputName1}"),
-                asset("storage/output/{$outputName2}")
-            ]
-        ]);
+            'status' => 'error',
+            'message' => 'Split failed',
+            'error' => $fullError,
+            'cleanError' => $cleanError
+        ], 500);
     }
 
-    //
-    // UNLOCK
-    public function unlock(Request $request)
-    {
-        $request->validate([
-            'pdf' => 'required|file|mimes:pdf',
-            'password' => 'required|string'
-        ]);
 
-        // Uloženie dočasného PDF
-        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'unlock');
-        $this->ensureOutputDirExists();
 
-        $outputName = 'unlocked_' . Str::uuid() . '.pdf';
-        $outputPath = storage_path("app/public/output/{$outputName}");
 
-        $pythonArgs = [
-            'python3', base_path('python/unlock.py'),
-            $pdfPath,
-            $request->input('password'),
-            $outputPath
-        ];
+    // Vymaž dočasný PDF
+    $this->cleanFiles([$pdfPath]);
 
-        $process = new Process($pythonArgs);
+    // Ulož výstupy do storage/output
+    Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
+    Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
 
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $exception) {
-            $this->cleanFiles([$pdfPath]);
-            $fullError = $exception->getMessage();
-            $cleanError = $this->extractPythonError($fullError);
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Unlock failed',
-                'error' => $fullError,
-                'cleanError' => $cleanError
-            ], 500);
-        }
-
-        $this->cleanFiles([$pdfPath]);
-
-        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
-        
-        // Uloženie do histórie
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('unlock', $location);
-
-        return response()->json([
-            'status' => 'success',
-            'processed_file' => asset("storage/output/{$outputName}")
-        ]);
+    return response()->json([
+        'status' => 'success',
+        'processed_files' => [
+            asset("storage/output/{$outputName1}"),
+            asset("storage/output/{$outputName2}")
+        ]
+    ]);
     }
 
-    //
-    // LOCK
-    public function lock(Request $request)
+    public function extract(Request $request)
     {
-        $request->validate([
-            'pdf' => 'required|file|mimes:pdf',
-            'password' => 'required|string'
-        ]);
-
-        // Uloženie dočasného PDF
-        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'unlock');
-        $this->ensureOutputDirExists();
-
-        $outputName = 'locked_' . Str::uuid() . '.pdf';
-        $outputPath = storage_path("app/public/output/{$outputName}");
-
-        $pythonArgs = [
-            'python3', base_path('python/lock.py'),
-            $pdfPath,
-            $request->input('password'),
-            $outputPath
-        ];
-
-        $process = new Process($pythonArgs);
-
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $exception) {
-            $this->cleanFiles([$pdfPath]);
-            $fullError = $exception->getMessage();
-            $cleanError = $this->extractPythonError($fullError);
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Lock failed',
-                'error' => $fullError,
-                'cleanError' => $cleanError
-            ], 500);
-        }
-
-        $this->cleanFiles([$pdfPath]);
-
-        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
-
-        // Uloženie do histórie
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('lock', $location);
-
-        return response()->json([
-            'status' => 'success',
-            'processed_file' => asset("storage/output/{$outputName}")
-        ]);
-    }
-
-    //
-    // ROTATE
-    public function rotate(Request $request)
-    {
-        $request->validate([
-            'pdf' => 'required|file|mimes:pdf',
-            'page_number' => 'required|integer|min:1',
-            'rotation_angle' => 'required|integer|in:90,180,270'
-        ]);
-
-        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'rotate');
-        $this->ensureOutputDirExists();
-
-        $outputName = 'rotated_' . Str::uuid() . '.pdf';
-        $outputPath = storage_path("app/public/output/{$outputName}");
-
-        $pythonArgs = [
-            'python3', base_path('python/rotate.py'),
-            $pdfPath,
-            $request->input('page_number'),
-            $request->input('rotation_angle'),
-            $outputPath
-        ];
-
-        $process = new Process($pythonArgs);
-
-        try {
-            $process->mustRun();
-        } catch (ProcessFailedException $exception) {
-            $this->cleanFiles([$pdfPath]);
-            $fullError = $exception->getMessage();
-            $cleanError = $this->extractPythonError($fullError);
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Rotate failed',
-                'error' => $fullError,
-                'cleanError' => $cleanError
-            ], 500);
-        }
-
-        $this->cleanFiles([$pdfPath]);
-
-        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
-
-        // Uloženie do histórie
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('rotate', $location);
-
-        return response()->json([
-            'status' => 'success',
-            'processed_file' => asset("storage/output/{$outputName}")
-        ]);
-    }
-
-    //
-    // REMOVE SINGLE PAGE
-    public function removePage(Request $request)
-    {
+        // Validácia vstupov
         $request->validate([
             'pdf' => 'required|file|mimes:pdf',
             'page_number' => 'required|integer|min:1'
         ]);
 
-        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'remove');
+        // Uloženie PDF do dočasného súboru
+        $pdfPath = $this->saveTmpFile($request->file('pdf'), 0);
+        $pageNumber = $request->input('page_number');
+
+        // Vytvorenie výstupného priečinka
         $this->ensureOutputDirExists();
 
-        $outputName = 'removed' . $request->input('page_number') . '_' . \Illuminate\Support\Str::uuid() . '.pdf';
+        // Výstupný súbor
+        $outputName = 'extracted_' . Str::uuid() . '.pdf';
         $outputPath = storage_path("app/public/output/{$outputName}");
 
-        $pythonArgs = [
-            'python3', base_path('python/remove_page.py'),
+        // Spustenie Python skriptu
+        $process = new Process([
+            'python3',
+            base_path('python/extract.py'),
             $pdfPath,
-            $request->input('page_number'),
+            $pageNumber,
             $outputPath
-        ];
-
-        $process = new Process($pythonArgs);
+        ]);
 
         try {
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->cleanFiles([$pdfPath]);
-            $fullError = $exception->getMessage();
-            $cleanError = $this->extractPythonError($fullError);
 
             return response()->json([
                 'status' => 'error',
-                'message' => 'Remove page failed',
-                'error' => $fullError,
-                'cleanError' => $cleanError
+                'message' => 'Extraction failed',
+                'error' => $this->extractPythonError($exception->getMessage())
             ], 500);
         }
 
+        // Vyčistenie dočasných súborov
         $this->cleanFiles([$pdfPath]);
-
-        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
-
-        // Uloženie do histórie
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('removePage', $location);
 
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
         ]);
     }
+
 
 }
