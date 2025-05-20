@@ -38,7 +38,6 @@ class HistoryController extends Controller
                 $history->interface,
                 $history->used_at,
                 $history->location,
-                $history->created_at,
             ];
             // Escape fields: wrap in quotes if contains comma or newline or quote, and escape quotes
             foreach ($row as &$field) {
@@ -62,20 +61,20 @@ class HistoryController extends Controller
         ]);
     }
 
-    public function store(Request $request)     // toto bude treba este pripojit na front-end
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,user_id',
-            'service_id' => 'required|string',
-            'interface' => 'required|string',
-            'used_at' => 'required|date',
-            'location' => 'required|string',
-        ]);
-
-        $history = History::create($validated);
-
-        return response()->json($history, 201);
-    }
+//    public function store(Request $request)
+//    {
+//        $validated = $request->validate([
+//            'user_id' => 'required|exists:users,user_id',
+//            'service_id' => 'required|string',
+//            'interface' => 'required|string',
+//            'used_at' => 'required|date',
+//            'location' => 'required|string',
+//        ]);
+//
+//        $history = History::create($validated);
+//
+//        return response()->json($history, 201);
+//    }
 
 //    public function update(Request $request, $id)
 //    {
