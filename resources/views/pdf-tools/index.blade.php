@@ -59,10 +59,11 @@
         <div class="tile active" data-action="merge">Merge PDF</div>
         <div class="tile" data-action="split">Split PDF</div>
         <div class="tile" data-action="unlock">Unlock PDF</div>
+        <div class="tile" data-action="lock">Lock PDF</div>
         <div class="tile" data-action="rotate">Rotate Page</div>
-        <div class="tile" data-action="remove">Remove Page</div>
+        <div class="tile" data-action="removePage">Remove Page</div>
         <div class="tile" data-action="extract">Extract Page</div>
-        <div class="tile" data-action="pagenumber">Add Page Numbers</div>
+        <div class="tile" data-action="pageNumber">Add Page Numbers</div>
         <div class="tile" data-action="create">Create PDF</div>
         <div class="tile" data-action="pdf2word">PDF to Word</div>
         <div class="tile" data-action="jpg2pdf">JPG to PDF</div>
@@ -110,6 +111,16 @@
                 <input type="number" id="split_page" name="split_page" min="1" value="1">
             </div>
         `,
+        lock: `
+            <div class="form-group">
+                <label for="pdf">Unprotected PDF File</label>
+                <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+        `,
         unlock: `
             <div class="form-group">
                 <label for="pdf">Protected PDF File</label>
@@ -138,7 +149,7 @@
                 </select>
             </div>
         `,
-        remove: `
+        removePage: `
             <div class="form-group">
                 <label for="pdf">PDF File to Modify</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
@@ -158,7 +169,7 @@
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
         `,
-        pagenumber: `
+        pageNumber: `
             <div class="form-group">
                 <label for="pdf">PDF File to Number</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>

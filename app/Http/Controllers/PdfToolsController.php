@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;  // Toto je kritický import
 use Illuminate\Support\Facades\Storage;
-//use Illuminate\Support\Facades\Http;
-//use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -96,9 +95,6 @@ class PdfToolsController extends Controller
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
-        $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('merge', $location);
-
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
@@ -159,15 +155,15 @@ class PdfToolsController extends Controller
         ], 500);
     }
 
+
+
+
     // Vymaž dočasný PDF
     $this->cleanFiles([$pdfPath]);
 
     // Ulož výstupy do storage/output
     Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
     Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
-
-    $location = \App\Models\History::resolveLocation($request);
-    \App\Models\History::record('split', $location);
 
     return response()->json([
         'status' => 'success',
@@ -177,4 +173,55 @@ class PdfToolsController extends Controller
         ]
     ]);
     }
+
+    public function extract(Request $request)
+    {
+        // Validácia vstupov
+        $request->validate([
+            'pdf' => 'required|file|mimes:pdf',
+            'page_number' => 'required|integer|min:1'
+        ]);
+
+        // Uloženie PDF do dočasného súboru
+        $pdfPath = $this->saveTmpFile($request->file('pdf'), 0);
+        $pageNumber = $request->input('page_number');
+
+        // Vytvorenie výstupného priečinka
+        $this->ensureOutputDirExists();
+
+        // Výstupný súbor
+        $outputName = 'extracted_' . Str::uuid() . '.pdf';
+        $outputPath = storage_path("app/public/output/{$outputName}");
+
+        // Spustenie Python skriptu
+        $process = new Process([
+            'python3',
+            base_path('python/extract.py'),
+            $pdfPath,
+            $pageNumber,
+            $outputPath
+        ]);
+
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $exception) {
+            $this->cleanFiles([$pdfPath]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Extraction failed',
+                'error' => $this->extractPythonError($exception->getMessage())
+            ], 500);
+        }
+
+        // Vyčistenie dočasných súborov
+        $this->cleanFiles([$pdfPath]);
+
+        return response()->json([
+            'status' => 'success',
+            'processed_file' => asset("storage/output/{$outputName}")
+        ]);
+    }
+
+
 }
