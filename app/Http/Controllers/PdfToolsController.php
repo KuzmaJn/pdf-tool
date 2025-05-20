@@ -52,15 +52,11 @@ class PdfToolsController extends Controller
         // Uloženie všetkých PDF do temp adresára
         $pdfPaths = [];
         foreach ($request->file('pdf_files') as $idx => $file) {
-            $tmpName = Str::uuid() . "_{$idx}.pdf";
-            $file->storeAs("tmp", $tmpName, 'public');
-            $pdfPaths[] = storage_path("app/public/tmp/{$tmpName}");
+            $pdfPaths[] = $this->saveTmpFile($file, $idx);
         }
 
         // Over a prípadne vytvor priečinok output v storage/app/public
-        if (!Storage::disk('public')->exists('output')) {
-            Storage::disk('public')->makeDirectory('output');
-        }
+        $this->ensureOutputDirExists();
 
         // Výstupný súbor
         $outputName = 'merged_' . Str::uuid() . '.pdf';
@@ -79,9 +75,7 @@ class PdfToolsController extends Controller
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             // Vymaž dočasné PDF ak zlyhá
-            foreach ($pdfPaths as $pdf) {
-                @unlink($pdf);
-            }
+            $this->cleanFiles($pdfPaths);
 
             $fullError = $exception->getMessage();
             $cleanError = extractPythonError($fullError);
@@ -95,9 +89,7 @@ class PdfToolsController extends Controller
         }
 
         // Odstránenie dočasných súborov po zlúčení
-        foreach ($pdfPaths as $pdf) {
-            @unlink($pdf);
-        }
+        $this->cleanFiles($pdfPaths);
 
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
@@ -110,21 +102,17 @@ class PdfToolsController extends Controller
 
 
     public function split(Request $request) {
-        // Validácia vstupu
+    // Validácia vstupu
     $request->validate([
         'pdf' => 'required|file|mimes:pdf',
         'split_page' => 'required|integer|min:1'
     ]);
 
     // Uloženie PDF do temp adresára
-    $tmpName = Str::uuid() . ".pdf";
-    $request->file('pdf')->storeAs("tmp", $tmpName, 'public');
-    $pdfPath = storage_path("app/public/tmp/{$tmpName}");
+    $pdfPath = $this->saveTmpFile($request->file('pdf'), 'split');
 
     // Over a prípadne vytvor priečinok output v storage/app/public
-    if (!Storage::disk('public')->exists('output')) {
-        Storage::disk('public')->makeDirectory('output');
-    }
+    $this->ensureOutputDirExists();
 
     // Výstupné súbory
     $outputName1 = 'split1_' . Str::uuid() . '.pdf';
@@ -146,7 +134,7 @@ class PdfToolsController extends Controller
     try {
         $process->mustRun();
     } catch (ProcessFailedException $exception) {
-        @unlink($pdfPath);
+        $this->cleanFiles([$pdfPath]);
         
         function extractPythonError($text) {
             if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
@@ -167,7 +155,7 @@ class PdfToolsController extends Controller
     }
 
     // Vymaž dočasný PDF
-    @unlink($pdfPath);
+    $this->cleanFiles([$pdfPath]);
 
     // Ulož výstupy do storage/output
     Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
