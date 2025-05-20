@@ -36,7 +36,6 @@
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Interface</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Used At</th>
                             <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Created At</th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -48,7 +47,6 @@
                                 <td class="px-4 py-2">{{ $history->interface }}</td>
                                 <td class="px-4 py-2">{{ $history->used_at }}</td>
                                 <td class="px-4 py-2">{{ $history->location }}</td>
-                                <td class="px-4 py-2">{{ $history->created_at }}</td>
                             </tr>
                         @empty
                             <tr>

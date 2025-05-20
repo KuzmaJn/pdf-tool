@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+//use Illuminate\Support\Facades\Http;
+//use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
@@ -97,6 +99,9 @@ class PdfToolsController extends Controller
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('merge', $location);
+
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
@@ -165,6 +170,10 @@ class PdfToolsController extends Controller
         Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
         Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
 
+        // Uloženie do histórie
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('split', $location);
+
         return response()->json([
             'status' => 'success',
             'processed_files' => [
@@ -217,6 +226,10 @@ class PdfToolsController extends Controller
         $this->cleanFiles([$pdfPath]);
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
+        
+        // Uloženie do histórie
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('unlock', $location);
 
         return response()->json([
             'status' => 'success',
@@ -267,6 +280,10 @@ class PdfToolsController extends Controller
         $this->cleanFiles([$pdfPath]);
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
+
+        // Uloženie do histórie
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('lock', $location);
 
         return response()->json([
             'status' => 'success',
@@ -319,6 +336,10 @@ class PdfToolsController extends Controller
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // Uloženie do histórie
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('rotate', $location);
+
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
@@ -367,6 +388,10 @@ class PdfToolsController extends Controller
         $this->cleanFiles([$pdfPath]);
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
+
+        // Uloženie do histórie
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('removePage', $location);
 
         return response()->json([
             'status' => 'success',
