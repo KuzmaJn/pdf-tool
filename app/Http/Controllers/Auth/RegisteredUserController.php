@@ -39,7 +39,6 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'api_key' => bin2hex(random_bytes(30)), // Secure API key generation
         ]);
 
         event(new Registered($user));
