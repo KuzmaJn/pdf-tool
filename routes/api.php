@@ -1,22 +1,10 @@
 <?php
+
+use App\Http\Controllers\Api\AuthController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
 
-Route::prefix('users')->group(function () {
-    Route::post('/', [UserController::class, 'store']);     // Vytvoriť používateľa
-    Route::get('/', [UserController::class, 'index']);      // Zoznam používateľov
-    Route::get('{id}', [UserController::class, 'show']);    // Detail používateľa
-    Route::put('{id}', [UserController::class, 'update']);  // Update používateľa
-    Route::delete('{id}', [UserController::class, 'destroy']); // Zmazať používateľa
-});
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-
-use App\Http\Controllers\HistoryController;
-
-Route::prefix('history')->group(function () {
-    Route::get('/', [HistoryController::class, 'index']);
-    Route::get('{id}', [HistoryController::class, 'show']);
-    Route::post('/', [HistoryController::class, 'store']);
-    Route::put('{id}', [HistoryController::class, 'update']);
-    Route::delete('{id}', [HistoryController::class, 'destroy']);
-});
