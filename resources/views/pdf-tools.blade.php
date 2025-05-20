@@ -53,6 +53,8 @@
     </style>
 </head>
 <body>
+<x-app-layout>
+
 <div class="container">
     <h2>PDF Tool</h2>
     <div class="tiles">
@@ -68,7 +70,7 @@
         <div class="tile" data-action="jpg2pdf">JPG to PDF</div>
     </div>
 
-    <form id="pdfForm" method="POST" action="/api/pdf/process" enctype="multipart/form-data">
+    <form id="pdfForm" method="POST" action="#" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="action" id="actionInput" value="merge">
         <div id="inputsArea">
@@ -77,12 +79,7 @@
         <button type="submit" id="submitBtn" disabled>Process</button>
     </form>
 
-    @if(session('outputPath'))
-        <div class="output">
-            <div>Output ready:</div>
-            <a href="{{ route('pdf.download', ['path' => session('outputPath')]) }}" class="download-btn">Download</a>
-        </div>
-    @endif
+    <div id="output"></div>
 </div>
 
 <script>
@@ -92,15 +89,17 @@
     const submitBtn = document.getElementById('submitBtn');
 
     const inputTemplates = {
+        tmpOutputNameFile: `
+            <div class="form-group">
+                <label for="output_name">Output File Name</label>
+                <input type="text" id="output_name" name="output_name" value="merged.pdf" required>
+            </div>
+        `,
         merge: `
             <div class="form-group">
                 <label for="pdf_files">PDF Files to Merge</label>
                 <input type="file" id="pdf_files" name="pdf_files[]" accept="application/pdf" required multiple>
                 <small>Select multiple PDF files to merge</small>
-            </div>
-            <div class="form-group">
-                <label for="output_name">Output File Name</label>
-                <input type="text" id="output_name" name="output_name" value="merged.pdf" required>
             </div>
         `,
         split: `
@@ -233,8 +232,14 @@
 
         // Add event listeners to all inputs
         Array.from(inputsArea.querySelectorAll('input, select, textarea')).forEach(input => {
-            input.addEventListener('input', checkInputs);
-            input.addEventListener('change', checkInputs);
+            input.addEventListener('input', function() {
+                checkInputs();
+                document.getElementById('output').innerHTML = '';
+            });
+            input.addEventListener('change', function() {
+                checkInputs();
+                document.getElementById('output').innerHTML = '';
+            });
         });
 
         // Special handling for split options
@@ -279,8 +284,45 @@
         });
     });
 
+    // Handle form submission
+    document.getElementById('pdfForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        console.log('Form data:', new FormData(this));
+        console.log('Action:', actionInput.value);
+        const formData = new FormData(this);
+        const action = actionInput.value;
+        let url = '/pdf/' + action;
+
+        const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+        });
+
+        if (response.ok) {
+        const data = await response.json();
+        console.log('Úspech: ' + JSON.stringify(data));
+        if (data.status === 'success') {
+            document.getElementById('output').innerHTML =
+            `<div class="output">
+                <a href="${data.merged_file}" class="download-btn" download>Stiahnuť PDF</a>
+            </div>`;
+        } else {
+            document.getElementById('output').innerHTML =
+            `<div class="output" style="background-color: #dc3545;">Chyba: ${data.message ?? 'Neznáma chyba'}</div>`;
+        }
+        } else {
+        document.getElementById('output').innerHTML =
+            `<div class="output" style="background-color: #dc3545;">Chyba: ${response.status}</div>`;
+        }
+    });
+
     // Initial render
     renderInputs('merge');
 </script>
+</x-app-layout>
+
 </body>
 </html>

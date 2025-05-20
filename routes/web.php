@@ -6,14 +6,19 @@ use App\Http\Controllers\PdfToolsController;
 use App\Http\Controllers\PdfApiController;
 
 Route::get('/', function () {
-    return view('index');
+    return view('auth/register');
 });
 
-Route::post('pdf/merge', [PdfApiController::class, 'merge'])->name('pdf.merge');
+Route::prefix('pdf')->controller(PdfToolsController::class)->group(function () {
+    Route::post('/merge', 'merge')->name('pdf.merge');
+    Route::post('/split', 'split')->name('pdf.split');
+    Route::post('/remove-page', 'removePage')->name('pdf.removePage');
+    // Pridávaj ďalšie PDF operácie tu...
+});
 
-
-
-Route::get('/pdf-tools', [PdfToolsController::class, 'index'])->name('pdf.tools');
+Route::get('/pdf-tools', function () {
+    return view('pdf-tools');
+})->middleware(['auth', 'verified'])->name('pdf-tools');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
