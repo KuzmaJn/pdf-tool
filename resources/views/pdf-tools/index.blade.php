@@ -100,15 +100,8 @@
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label>Split Options</label>
-                <select name="split_option" id="split_option">
-                    <option value="single">Split into single pages</option>
-                    <option value="range">Split by page range</option>
-                </select>
-            </div>
-            <div class="form-group" id="range_group">
-                <label for="page_range">Page Range (e.g., 1-3,5,7-9)</label>
-                <input type="text" id="page_range" name="page_range">
+                <label>Split At Page Number</label>
+                <input type="number" id="split_page" name="split_page" min="1" value="1">
             </div>
         `,
         unlock: `
@@ -298,21 +291,29 @@
         }
         });
 
-        if (response.ok) {
         const data = await response.json();
+        if (response.ok) {
         console.log('Úspech: ' + JSON.stringify(data));
         if (data.status === 'success') {
-            document.getElementById('output').innerHTML =
-            `<div class="output">
-                <a href="${data.merged_file}" class="download-btn" download>Stiahnuť PDF</a>
-            </div>`;
+            if (action == "split") {
+                document.getElementById('output').innerHTML =
+                `<div class="output">
+                    <a href="${data.processed_files[0]}" class="download-btn" download>Stiahnuť prvú časť PDF</a>
+                    <a href="${data.processed_files[1]}" class="download-btn" download>Stiahnuť druhú časť PDF</a>
+                </div>`;
+            } else {
+                document.getElementById('output').innerHTML =
+                `<div class="output">
+                    <a href="${data.processed_file}" class="download-btn" download>Stiahnuť PDF</a>
+                </div>`;
+            }
         } else {
             document.getElementById('output').innerHTML =
             `<div class="output" style="background-color: #dc3545;">Chyba: ${data.message ?? 'Neznáma chyba'}</div>`;
         }
         } else {
         document.getElementById('output').innerHTML =
-            `<div class="output" style="background-color: #dc3545;">Chyba: ${response.status}</div>`;
+            `<div class="output" style="background-color: #dc3545;">(Chyba: ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}</div>`;
         }
     });
 
