@@ -16,7 +16,7 @@
                         {{ __('PDF Tools') }}
                     </x-nav-link>
                     <x-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
-                        {{ __('Manuál') }}
+                        {{ __('User Manual') }}
                     </x-nav-link>
                     @if (Auth::user()->is_admin)
                         <x-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
@@ -79,7 +79,7 @@
                 {{ __('PDF Tools') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
-                {{ __('Manuál') }}
+                {{ __('User Manual') }}
             </x-responsive-nav-link>
             @if (Auth::user()->is_admin)
                 <x-responsive-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">

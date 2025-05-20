@@ -70,6 +70,38 @@
             </template>
         </div>
     </form>
+
+    <!-- Modal -->
+    <div
+        x-show="showModal"
+        x-transition
+        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        style="display: none;"
+    >
+        <div class="bg-white p-6 rounded shadow max-w-sm w-auto">
+            <h3 class="text-lg font-semibold mb-2">{{ __('Tvoj nový API kľúč') }}</h3>
+            <template x-if="modalText">
+                <div class="flex items-center space-x-2">
+                    <span class="break-all text-gray-700 text-sm" x-text="modalText.split('|')[1] ?? modalText"></span>
+                    <button
+                        type="button"
+                        class="text-indigo-600 hover:text-indigo-800 text-xs border border-indigo-200 rounded px-1 py-1 flex items-center"
+                        @click="copyKey($event, (modalText.split('|')[1] ?? modalText).trim())"
+                        :title="'Copy to clipboard'"
+                    >
+                        <!-- Copy SVG icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <rect x="9" y="9" width="13" height="13" rx="2" stroke-width="2" stroke="currentColor" fill="none"/>
+                            <rect x="3" y="3" width="13" height="13" rx="2" stroke-width="2" stroke="currentColor" fill="none"/>
+                        </svg>
+                    </button>
+                </div>
+            </template>
+            <x-secondary-button class="mt-4 px-4 py-2" @click="showModal = false">
+                {{ __('Zavrieť') }}
+            </x-secondary-button>
+        </div>
+    </div>
 </section>
 
 <script>
@@ -79,6 +111,8 @@
             newName: '',
             newExpires: 60,
             plainText: '',
+            showModal: false,
+            modalText: '',
 
             async init() {
                 this.fetchKeys();
@@ -128,13 +162,24 @@
                         return;
                     }
                     let data = await res.json();
-                    this.plainText = data.plainText;
+                    // this.plainText = data.plainText;
+                    this.modalText = data.plainText;
+                    this.showModal = true;
                     this.newName = '';
                     this.newExpires = 60;
                     this.fetchKeys();
                 } catch (e) {
                     console.error(e);
                 }
+            },
+
+            copyKey($event, key) {
+                const input = document.createElement('input');
+                input.value = key;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
             }
         }
     }

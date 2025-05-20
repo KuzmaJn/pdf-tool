@@ -57,6 +57,12 @@
 </style>
 
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('User Manual') }}
+        </h2>
+    </x-slot>
+
     <div class="container manual-container">
         <h1 class="manual-title">Používateľská príručka - IGA GUI</h1>
 

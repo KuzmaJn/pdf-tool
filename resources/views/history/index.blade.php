@@ -7,15 +7,21 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
             <!-- Action Buttons -->
-            <div class="mb-4 flex space-x-4">
-                <form method="POST" action="{{ route('history.export') }}">
+            <div class="mb-4 flex justify-end space-x-4">
+                <form method="POST"
+                      action="{{ route('history.export') }}"
+                      class="px-2">
                     @csrf
                     <x-primary-button>
                         {{ __('Export to CSV') }}
                     </x-primary-button>
                 </form>
-                <form method="POST" action="{{ route('history.destroyAll') }}" onsubmit="return confirm('Are you sure you want to delete all history records?');">
+                <form method="POST"
+                      action="{{ route('history.destroyAll') }}"
+                      class=""
+                      onsubmit="return confirm('Are you sure you want to delete all history records?');">
                     @csrf
                     @method('DELETE')
                     <x-danger-button>
@@ -26,7 +32,7 @@
 
             <!-- History Table -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 text-gray-900 overflow-x-auto w-full">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                         <tr>
