@@ -94,8 +94,11 @@ Route::middleware('auth')->group(function () {
     Route::prefix('pdf')->controller(PdfToolsController::class)->group(function () {
         Route::post('/merge', 'merge')->name('pdf.merge');
         Route::post('/split', 'split')->name('pdf.split');
-        Route::post('/remove-page', 'removePage')->name('pdf.removePage');
-        // Pridávaj ďalšie PDF operácie tu...
+        Route::post('/unlock', 'unlock')->name('pdf.unlock');
+        Route::post('/lock', 'lock')->name('pdf.lock');
+        Route::post('/rotate', 'rotate')->name('pdf.rotate');
+        Route::post('/removePage', 'removePage')->name('pdf.removePage');
+        
     });
 });
 
