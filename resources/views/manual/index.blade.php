@@ -1,138 +1,145 @@
-<style>
-    .manual-container {
-        max-width: 900px;
-        margin: 2rem auto;
-        padding: 2rem;
-        background: white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        line-height: 1.6;
-    }
+<x-app-layout>
 
-    .manual-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid #eee;
-    }
-
-    .manual-title {
-        color: #2c3e50;
-        margin: 0;
-    }
-
-    .download-pdf {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .manual-toc {
-        background: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 5px;
-        margin-bottom: 2rem;
-    }
-
-    .toc-title {
-        margin-top: 0;
-        color: #2c3e50;
-    }
-
-    .toc-list {
-        padding-left: 1.5rem;
-    }
-
-    .toc-list li {
-        margin-bottom: 0.5rem;
-    }
-
-    .toc-list a {
-        color: #3490dc;
-        text-decoration: none;
-    }
-
-    .toc-list a:hover {
-        text-decoration: underline;
-    }
-
-    .manual-section {
-        margin-bottom: 3rem;
-        padding-bottom: 2rem;
-        border-bottom: 1px solid #eee;
-    }
-
-    .manual-section h2 {
-        color: #2c3e50;
-        margin-top: 0;
-    }
-
-    .manual-section h3 {
-        color: #3d566e;
-    }
-
-    .operation-guide {
-        margin-bottom: 2rem;
-    }
-
-    .manual-image {
-        margin: 1.5rem 0;
-        text-align: center;
-    }
-
-    .manual-image img {
-        max-width: 100%;
-        height: auto;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-
-    .image-caption {
-        font-size: 0.9rem;
-        color: #6c757d;
-        margin-top: 0.5rem;
-    }
-
-    .note {
-        background-color: #f8f9fa;
-        border-left: 4px solid #3490dc;
-        padding: 1rem;
-        margin: 1rem 0;
-    }
-
-    .faq-item {
-        margin-bottom: 1.5rem;
-    }
-
-    .faq-item h3 {
-        margin-bottom: 0.5rem;
-        color: #3d566e;
-    }
-
-    .manual-footer {
-        text-align: center;
-        font-size: 0.9rem;
-        color: #6c757d;
-        margin-top: 3rem;
-        padding-top: 1rem;
-        border-top: 1px solid #eee;
-    }
-
-    @media (max-width: 768px) {
+    <style>
         .manual-container {
-            padding: 1rem;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            line-height: 1.6;
         }
 
         .manual-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
         }
-    }
-</style>
 
-<x-app-layout>
+        .manual-title {
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .download-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .manual-toc {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+        }
+
+        .toc-title {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        .toc-list {
+            padding-left: 1.5rem;
+        }
+
+        .toc-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .toc-list a {
+            color: #3490dc;
+            text-decoration: none;
+        }
+
+        .toc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .manual-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .manual-section h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .manual-section h3 {
+            color: #3d566e;
+        }
+
+        .operation-guide {
+            margin-bottom: 2rem;
+        }
+
+        .manual-image {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .manual-image img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .image-caption {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 0.5rem;
+        }
+
+        .note {
+            background-color: #f8f9fa;
+            border-left: 4px solid #3490dc;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item h3 {
+            margin-bottom: 0.5rem;
+            color: #3d566e;
+        }
+
+        .manual-footer {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        @media (max-width: 768px) {
+            .manual-container {
+                padding: 1rem;
+            }
+
+            .manual-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+    </style>
+
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('User Manual') }}
+        </h2>
+    </x-slot>
+
     <div class="manual-container">
         <div class="manual-header">
             <h1 class="manual-title">Používateľská príručka - PDF Editor</h1>

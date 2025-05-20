@@ -95,6 +95,9 @@ class PdfToolsController extends Controller
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('merge', $location);
+
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
@@ -103,75 +106,75 @@ class PdfToolsController extends Controller
 
 
     public function split(Request $request) {
-    // Validácia vstupu
-    $request->validate([
-        'pdf' => 'required|file|mimes:pdf',
-        'split_page' => 'required|integer|min:1'
-    ]);
+        // Validácia vstupu
+        $request->validate([
+            'pdf' => 'required|file|mimes:pdf',
+            'split_page' => 'required|integer|min:1'
+        ]);
 
-    // Uloženie PDF do temp adresára
-    $pdfPath = $this->saveTmpFile($request->file('pdf'), 'split');
+        // Uloženie PDF do temp adresára
+        $pdfPath = $this->saveTmpFile($request->file('pdf'), 'split');
 
-    // Over a prípadne vytvor priečinok output v storage/app/public
-    $this->ensureOutputDirExists();
+        // Over a prípadne vytvor priečinok output v storage/app/public
+        $this->ensureOutputDirExists();
 
-    // Výstupné súbory
-    $outputName1 = 'split1_' . Str::uuid() . '.pdf';
-    $outputName2 = 'split2_' . Str::uuid() . '.pdf';
-    $outputPath1 = storage_path("app/public/output/{$outputName1}");
-    $outputPath2 = storage_path("app/public/output/{$outputName2}");
+        // Výstupné súbory
+        $outputName1 = 'split1_' . Str::uuid() . '.pdf';
+        $outputName2 = 'split2_' . Str::uuid() . '.pdf';
+        $outputPath1 = storage_path("app/public/output/{$outputName1}");
+        $outputPath2 = storage_path("app/public/output/{$outputName2}");
 
-    // Priprav argumenty pre python: vstup, split_page, výstupy
-    $pythonArgs = [
-        'python3', base_path('python/split.py'),
-        $pdfPath,
-        $request->input('split_page'),
-        $outputPath1,
-        $outputPath2
-    ];
+        // Priprav argumenty pre python: vstup, split_page, výstupy
+        $pythonArgs = [
+            'python3', base_path('python/split.py'),
+            $pdfPath,
+            $request->input('split_page'),
+            $outputPath1,
+            $outputPath2
+        ];
 
-    $process = new Process($pythonArgs);
+        $process = new Process($pythonArgs);
 
-    try {
-        $process->mustRun();
-    } catch (ProcessFailedException $exception) {
-        $this->cleanFiles([$pdfPath]);
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $exception) {
+            $this->cleanFiles([$pdfPath]);
 
-        function extractPythonError($text) {
-            if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
-                return trim($matches[1]);
+            function extractPythonError($text) {
+                if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
+                    return trim($matches[1]);
+                }
+                return $text;
             }
-            return $text;
+
+            $fullError = $exception->getMessage();
+            $cleanError = extractPythonError($fullError);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Split failed',
+                'error' => $fullError,
+                'cleanError' => $cleanError
+            ], 500);
         }
 
-        $fullError = $exception->getMessage();
-        $cleanError = extractPythonError($fullError);
+        // Vymaž dočasný PDF
+        $this->cleanFiles([$pdfPath]);
+
+        // Ulož výstupy do storage/output
+        Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
+        Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
+
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('split', $location);
 
         return response()->json([
-            'status' => 'error',
-            'message' => 'Split failed',
-            'error' => $fullError,
-            'cleanError' => $cleanError
-        ], 500);
-    }
-
-
-
-
-    // Vymaž dočasný PDF
-    $this->cleanFiles([$pdfPath]);
-
-    // Ulož výstupy do storage/output
-    Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
-    Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
-
-    return response()->json([
-        'status' => 'success',
-        'processed_files' => [
-            asset("storage/output/{$outputName1}"),
-            asset("storage/output/{$outputName2}")
-        ]
-    ]);
+            'status' => 'success',
+            'processed_files' => [
+                asset("storage/output/{$outputName1}"),
+                asset("storage/output/{$outputName2}")
+            ]
+        ]);
     }
 
     public function extract(Request $request)
@@ -216,6 +219,9 @@ class PdfToolsController extends Controller
 
         // Vyčistenie dočasných súborov
         $this->cleanFiles([$pdfPath]);
+
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('extract', $location);
 
         return response()->json([
             'status' => 'success',
