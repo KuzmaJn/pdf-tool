@@ -1,0 +1,704 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "PDF Tools API",
+        "description": "API na manipuláciu s PDF súbormi (merge, split, unlock, rotate, atď.)",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Lokálny vývojový server"
+        }
+    ],
+    "paths": {
+        "/api/merge": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Zlúči viacero PDF súborov do jedného",
+                "description": "Vstup: Pole PDF súborov. Výstup: Zlúčený PDF súbor.",
+                "operationId": "e195a2c4358209a37aafd79339d62003",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf_files"
+                                ],
+                                "properties": {
+                                    "pdf_files": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "format": "binary"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne zlúčený",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/merged_1234.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Chyba pri zlučovaní",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Merge failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Python error..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/split": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Rozdelí PDF na dve časti podľa čísla strany",
+                "description": "Vstup: PDF súbor + číslo strany pre rozdelenie. Výstup: Dva PDF súbory.",
+                "operationId": "106230d36fa6df026a47dd49d92e3df5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "split_page"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "split_page": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne rozdelený",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_files": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string",
+                                                "example": "http://localhost:8000/storage/output/split1_1234.pdf"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/unlock": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Odomkne heslem chránené PDF",
+                "description": "Vstup: PDF súbor + heslo. Výstup: Odomknutý PDF súbor.",
+                "operationId": "9dfe5f3b2753e441e1a5b2062bb40562",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "moje_heslo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne odomknutý",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/unlocked_1234.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/lock": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Zahesluje PDF súbor",
+                "description": "Vstup: PDF súbor + heslo. Výstup: Zaheslovaný PDF súbor.",
+                "operationId": "c750197546732407c85f6588bbbf0150",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "tajne_heslo"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne zaheslovaný",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/locked_123.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Chyba pri zaheslovaní",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Lock failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Python error..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/rotate": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Otočí konkrétnu stranu v PDF",
+                "description": "Vstup: PDF súbor + číslo strany + uhol (90, 180, 270). Výstup: Upravený PDF súbor.",
+                "operationId": "d2974c6bbffc6bcec24c998d9c8500f3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "page_number",
+                                    "rotation_angle"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "page_number": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "rotation_angle": {
+                                        "type": "integer",
+                                        "example": 90
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne otočený",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/rotated_1234.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/remove-page": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Odstráni konkrétnu stranu z PDF",
+                "description": "Vstup: PDF súbor + číslo strany. Výstup: PDF bez odstránenej strany.",
+                "operationId": "d5cd14bdad0d6e2a9942a6a5d83c56bf",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "page_number"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "page_number": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Strana bola úspešne odstránená",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/removed_123.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/extract-page": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Extrahuje konkrétnu stranu z PDF",
+                "description": "Vytvorí nový PDF súbor obsahujúci iba zvolenú stranu z originálneho dokumentu.",
+                "operationId": "27a5783c3515c34d785ed22248807e34",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "page_number"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "page_number": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Strana bola úspešne extrahovaná",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/extracted_123.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Chyba pri extrakcii strany",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Extraction failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Page number out of range"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/number-pages": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Pridá číslovanie strán do PDF",
+                "operationId": "numberPages",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "position"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "position": {
+                                        "type": "string",
+                                        "enum": [
+                                            "bottom-center",
+                                            "bottom-right",
+                                            "bottom-left",
+                                            "top-center",
+                                            "top-right",
+                                            "top-left"
+                                        ]
+                                    },
+                                    "start_number": {
+                                        "type": "integer",
+                                        "minimum": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/create": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Vytvorí nový PDF súbor z textového obsahu",
+                "description": "Generuje PDF súbor na základe zadaného titulu, obsahu a orientácie.",
+                "operationId": "a898f28c56e24f5241daa8b94606f7ba",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "orientation"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "example": "Vzorová zmluva"
+                                    },
+                                    "content": {
+                                        "type": "string",
+                                        "example": "Toto je obsah dokumentu..."
+                                    },
+                                    "orientation": {
+                                        "type": "string",
+                                        "enum": [
+                                            "portrait",
+                                            "landscape"
+                                        ],
+                                        "example": "portrait"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "PDF bol úspešne vytvorený",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/generated_123.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Chyba pri generovaní PDF",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Create PDF failed"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Python error output..."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/add-watermark": {
+            "post": {
+                "tags": [
+                    "PDF Tools"
+                ],
+                "summary": "Pridá textový watermark do PDF",
+                "description": "Vstup: PDF súbor + text watermarku. Výstup: PDF s watermarkom.",
+                "operationId": "24ad89282a25c45e9488f4c3100ee6e4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "pdf",
+                                    "text"
+                                ],
+                                "properties": {
+                                    "pdf": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "text": {
+                                        "type": "string",
+                                        "example": "DÔVERNÉ"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Watermark bol úspešne pridaný",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "processed_file": {
+                                            "type": "string",
+                                            "example": "http://localhost:8000/storage/output/watermarked_123.pdf"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "PDF Tools",
+            "description": "Operácie s PDF súbormi"
+        }
+    ]
+}
