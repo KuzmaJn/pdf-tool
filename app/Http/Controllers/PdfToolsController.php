@@ -142,7 +142,7 @@ class PdfToolsController extends Controller
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->cleanFiles([$pdfPath]);
-            
+
             function extractPythonError($text) {
                 if (preg_match('/=====\n(.*?)\n=====/s', $text, $matches)) {
                     return trim($matches[1]);
@@ -226,7 +226,7 @@ class PdfToolsController extends Controller
 
         // Uloženie výsledného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
-        
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
         \App\Models\History::record('unlock', $location);
@@ -391,7 +391,7 @@ class PdfToolsController extends Controller
 
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('removePage', $location);
+        \App\Models\History::record('remove_page', $location);
 
         return response()->json([
             'status' => 'success',
@@ -400,7 +400,7 @@ class PdfToolsController extends Controller
     }
 
     //
-    // EXTRACT PAGE 
+    // EXTRACT PAGE
     public function extractPage(Request $request)
     {
         // Validácia vstupov
@@ -447,6 +447,9 @@ class PdfToolsController extends Controller
         // Vyčistenie dočasných súborov
         $this->cleanFiles([$pdfPath]);
 
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('extract_page', $location);
+
         return response()->json([
             'status' => 'success',
             'processed_file' => asset("storage/output/{$outputName}")
@@ -454,7 +457,6 @@ class PdfToolsController extends Controller
     }
 
     //
-    // ADD PAGE NUMBERS
     // ADD PAGE NUMBERS
     public function numberPages(Request $request)
     {
@@ -516,7 +518,6 @@ class PdfToolsController extends Controller
             'processed_file' => asset("storage/output/{$outputName}"),
         ]);
     }
-
 
 
     //

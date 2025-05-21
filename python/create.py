@@ -31,7 +31,10 @@ line_height   = 14
 left_margin   = 50
 top_margin    = height - 100
 bottom_margin = 50
-max_chars     = 100
+if orientation == 'landscape':
+  max_chars = 128
+else:
+  max_chars = 100
 
 text_y   = top_margin
 text_obj = c.beginText(left_margin, text_y)
@@ -48,7 +51,8 @@ for paragraph in content.split('\n'):
       text_y   = top_margin
       text_obj = c.beginText(left_margin, text_y)
 
-    text_obj.textLine(line + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!§")
+    # text_obj.textLine(line + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!§")
+    text_obj.textLine(line)
     text_y -= line_height
 
 #Dokresli zvyšok a ulož
