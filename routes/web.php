@@ -99,7 +99,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/rotate', 'rotate')->name('pdf.rotate');
         Route::post('/removePage', 'removePage')->name('pdf.removePage');
         Route::post('/extractPage', 'extractPage')->name('pdf.extractPage');
-        
+        Route::post('/numberPages', 'numberPages')->name('pdf.numberPages');
+        Route::post('/create', 'create')->name('pdf.create');
+        Route::post('/addWatermark', 'addWatermark')->name('pdf.addWatermark');
     });
 });
 
