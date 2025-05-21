@@ -49,6 +49,12 @@
         display: inline-block;
     }
     .download-btn:hover { background: #2e7d32; }
+    .fill-btn {
+        background: #eab100; color: #fff; border: none; padding: 10px 20px;
+        border-radius: 4px; cursor: pointer; margin-bottom: 16px; text-decoration: none;
+        display: inline-block;
+    }
+    .fill-btn:hover { background: #d08700; }
     .range-inputs { display: flex; gap: 10px; }
     .range-inputs input { flex: 1; }
     .file-preview { margin-top: 10px; max-width: 100%; }
@@ -63,10 +69,9 @@
         <div class="tile" data-action="rotate">Rotate Page</div>
         <div class="tile" data-action="removePage">Remove Page</div>
         <div class="tile" data-action="extractPage">Extract Page</div>
-        <div class="tile" data-action="pageNumber">Add Page Numbers</div>
+        <div class="tile" data-action="numberPages">Add Page Numbers</div>
         <div class="tile" data-action="create">Create PDF</div>
-        <div class="tile" data-action="pdf2word">PDF to Word</div>
-        <div class="tile" data-action="jpg2pdf">JPG to PDF</div>
+        <div class="tile" data-action="addWatermark">Add Watermark</div>
     </div>
 
     <form id="pdfForm" method="POST" action="#" enctype="multipart/form-data">
@@ -169,7 +174,7 @@
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
         `,
-        pageNumber: `
+        numberPages: `
             <div class="form-group">
                 <label for="pdf">PDF File to Number</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
@@ -179,8 +184,10 @@
                 <select id="position" name="position">
                     <option value="bottom-center">Bottom Center</option>
                     <option value="bottom-right">Bottom Right</option>
+                    <option value="bottom-left">Bottom Left</option>
                     <option value="top-center">Top Center</option>
                     <option value="top-right">Top Right</option>
+                    <option value="top-left">Top Left</option>
                 </select>
             </div>
             <div class="form-group">
@@ -190,43 +197,38 @@
         `,
         create: `
             <div class="form-group">
-                <label for="content">PDF Content</label>
-                <textarea id="content" name="content" rows="10" required></textarea>
+                <label for="create_title">Document Title</label>
+                <input type="text" id="create_title" name="title" class="form-control" placeholder="Enter the document title" required >
+                <small>The title that will appear at the top of your PDF</small>
             </div>
             <div class="form-group">
-                <label for="output_name">Output File Name</label>
-                <input type="text" id="output_name" name="output_name" value="document.pdf" required>
+                <label for="create_content">Content</label>
+                <textarea id="create_content" name="content" class="form-control" rows="6" placeholder="Type the body of your PDF here" required ></textarea>
+                <small>Main text/content of your new PDF</small>
             </div>
-        `,
-        pdf2word: `
+            <button type="button" id="btn-fill-content" class="fill-btn"> Fill with Test Text </button>
             <div class="form-group">
-                <label for="pdf">PDF File to Convert</label>
-                <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
-            </div>
-            <div class="form-group">
-                <label for="output_name">Output File Name</label>
-                <input type="text" id="output_name" name="output_name" value="converted.docx" required>
-            </div>
-        `,
-        jpg2pdf: `
-            <div class="form-group">
-                <label for="images">JPG Images to Convert</label>
-                <input type="file" id="images" name="images[]" accept="image/jpeg" required multiple>
-                <small>Select multiple JPG images to convert to PDF</small>
-            </div>
-            <div class="form-group">
-                <label for="output_name">Output File Name</label>
-                <input type="text" id="output_name" name="output_name" value="converted.pdf" required>
-            </div>
-            <div class="form-group">
-                <label for="orientation">Page Orientation</label>
-                <select id="orientation" name="orientation">
+                <label for="create_orientation">Page Orientation</label>
+                <select id="create_orientation" name="orientation" class="form-control" >
                     <option value="portrait">Portrait</option>
                     <option value="landscape">Landscape</option>
                 </select>
+                <small>Choose portrait or landscape layout</small>
             </div>
-        `
-    };
+        `,
+        addWatermark: `
+            <div class="form-group">
+                <label for="watermark_pdf">PDF File to Watermark</label>
+                <input type="file" id="watermark_pdf" name="pdf" accept="application/pdf" required >
+                <small>Select the PDF you want to add a watermark to</small>
+            </div>
+            <div class="form-group">
+                <label for="watermark_text">Watermark Text</label>
+                <input type="text" id="watermark_text" name="text" placeholder="Enter watermark text" required maxlength="100">
+                <small>Enter the text that will be overlaid on each page</small>
+                </div>
+            `
+        };
 
     function renderInputs(action) {
         inputsArea.innerHTML = inputTemplates[action];
@@ -244,18 +246,31 @@
             });
         });
 
-        // Special handling for split options
-        if (action === 'split') {
-            const splitOption = document.getElementById('split_option');
-            const rangeGroup = document.getElementById('range_group');
+        if (action === 'create') {
+            const btn = document.getElementById('btn-fill-content');
+            if (btn) {
+            btn.addEventListener('click', () => {
+                document.getElementById('create_content').value = `Dolore sint aute commodo reprehenderit labore fugiat nisi nulla. Aliquip dolore fugiat occaecat esse nisi officia do. Et enim labore laboris magna mollit eiusmod enim aliquip sit ipsum quis laborum.
 
-            splitOption.addEventListener('change', function() {
-                rangeGroup.style.display = this.value === 'range' ? 'block' : 'none';
+                Veniam exercitation ea tempor ipsum et reprehenderit nulla sit excepteur occaecat magna velit. Officia do velit pariatur cillum. Et consectetur nulla sint elit adipisicing anim cillum voluptate laboris excepteur est commodo adipisicing minim.
+
+                Aliqua eiusmod est voluptate voluptate nostrud non pariatur. Excepteur pariatur sit velit anim labore consectetur cillum ea. Laborum non anim irure aliquip eu in ullamco laboris consequat. Veniam consequat mollit aute culpa est eu amet adipisicing. Duis labore do officia excepteur mollit est pariatur esse minim. Labore officia labore dolore esse excepteur exercitation sit eu labore eu sint dolor irure elit. Labore ipsum veniam veniam do dolore ad veniam ullamco id culpa est cupidatat cupidatat minim.
+
+                Laboris cupidatat do dolore nisi elit qui aute sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
+
+                Ea deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
+                
+                Nulla sit excepteur occaecat magna velit. Officia do velit pariatur cillum. Et consectetur nulla sint elit adipisicing anim cillum voluptate laboris excepteur est ce sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
+
+                Lit qui aute nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint. Creatur nasca pes deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
+                
+                Ut laborum enim qui ullamco enim adipisicing magna nostrud deserunt. Sunt fugiat nostrud mollit proident in pariatur magna ex. Minim labore nostrud do cupidatat ut ullamco ex aute quis laboris quis deserunt aute laborum. Consectetur qui id pariatur est aliqua. Aliquip exercitation officia reprehenderit dolore non cillum eu laborum elit. Voluptate tempor irure sint fugiat ex quis culpa aliquip irure ex anim deserunt ipsum. Elit incididunt deserunt minim esse consectetur qui est labore pariatur nostrud ea.
+
+                Nostrud duis adipisicing officia irure amet nisi nulla dolor deserunt. Cillum veniam irure cillum enim commodo anim cillum. Elit magna magna id amet laboris do est nulla in. Exercitation in dolor cupidatat ut sunt veniam eu laborum id deserunt. Qui labore ullamco exercitation ut incididunt dolore commodo aliqua do. Occaecat culpa dolor amet sunt dolore adipisicing elit amet et sunt quis Lorem. Proident irure ipsum labore consequat aute ex proident commodo ipsum. Proident non consequat est ut fugiat culpa consequat ad officia cillum commodo in quis consectetur. Id fugiat pariatur reprehenderit ea ut dolore voluptate quis elit. Qui ex excepteur amet do aliquip qui incididunt culpa duis laboris elit nisi sint occaecat. Esse aute ipsum Lorem velit. Ullamco Lorem ullamco labore ullamco pariatur consectetur laboris et incididunt ea.
+                `;
                 checkInputs();
             });
-
-            // Initial state
-            rangeGroup.style.display = splitOption.value === 'range' ? 'block' : 'none';
+            }
         }
     }
 
@@ -282,8 +297,8 @@
             this.classList.add('active');
             const action = this.getAttribute('data-action');
             actionInput.value = action;
-            renderInputs(action);
             clearOutput();
+            renderInputs(action);
         });
     });
 
