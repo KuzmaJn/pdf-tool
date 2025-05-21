@@ -479,7 +479,7 @@
                 </div>`;
             }
         } else {
-            createOutputElement(`@lang('messages.error') ${data.message ?? '@lang('messages.unknownError')'}`);
+            createOutputElement(`@lang('messages.error') ${data.message ?? '@lang("messages.unknownError")'}`);
         }
         } else {
             createOutputElement(`(@lang('messages.error') ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}`);

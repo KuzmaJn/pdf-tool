@@ -29,7 +29,7 @@ class History extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function record($service_id, $location, $interface = 'web') {
+    public static function record($service_id, $location, $interface) {
         return self::create([
             'user_id'    => auth()->id(),
             'service_id' => $service_id,

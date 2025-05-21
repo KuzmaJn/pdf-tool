@@ -1,5 +1,12 @@
 <x-app-layout>
 
+    <div class="container manual-container">
+
+        <h1 class="manual-title">Používateľská príručka - MyABe-PDF</h1>
+        <div class="manual-actions">
+            <a href="{{ route('manual.download') }}" class="download-btn btn-primary">
+
+
     <style>
         .manual-container {
             max-width: 900px;
@@ -144,239 +151,252 @@
         <div class="manual-header">
             <h1 class="manual-title">Používateľská príručka - PDF Editor</h1>
             <a href="{{ route('manual.download') }}" class="btn btn-primary download-pdf">
+
                 <i class="fas fa-file-pdf"></i> Stiahnuť PDF verziu
             </a>
         </div>
-
-        <div class="manual-toc card">
-            <h2 class="toc-title">Obsah</h2>
-            <ol class="toc-list">
+        <br>
+        <div class="manual-toc">
+            <h2>Obsah</h2>
+            <ul>
                 <li><a href="#uvod">Úvod</a></li>
-                <li><a href="#registracia">Registrácia a prihlásenie</a></li>
-                <li><a href="#zakladne-operacie">Základné operácie</a>
-                    <ol>
-                        <li><a href="#merge">Spájanie PDF</a></li>
-                        <li><a href="#split">Rozdelenie PDF</a></li>
-                        <li><a href="#unlock">Odomknutie PDF</a></li>
-                        <li><a href="#rotate">Otočenie stránky</a></li>
-                        <li><a href="#remove">Odstránenie stránky</a></li>
-                    </ol>
-                </li>
-                <li><a href="#pokrocile-funkcie">Pokročilé funkcie</a>
-                    <ol>
-                        <li><a href="#extract">Extrahovanie stránky</a></li>
-                        <li><a href="#pagenumber">Pridanie číslovania</a></li>
-                        <li><a href="#create">Vytvorenie PDF</a></li>
-                        <li><a href="#pdf2word">Konverzia na Word</a></li>
-                        <li><a href="#jpg2pdf">Konverzia obrázkov na PDF</a></li>
-                    </ol>
-                </li>
-                <li><a href="#admin">Administrátorský mód</a></li>
-                <li><a href="#faq">Časté otázky</a></li>
-            </ol>
+                <li><a href="#zakladne-funkcie">Základné funkcie</a></li>
+                <li><a href="#pokrocile-funkcie">Pokročilé funkcie</a></li>
+                <li><a href="#api">API prístup</a></li>
+                <li><a href="#admin">Admin funkcie</a></li>
+                <li><a href="#faq">Často kladené otázky</a></li>
+            </ul>
         </div>
 
-        <div class="manual-content">
-            <section id="uvod" class="manual-section">
-                <h2>1. Úvod</h2>
-                <p>Vitajte v používateľskej príručke pre <strong>PDF Editor</strong> - výkonného nástroja na úpravu PDF dokumentov. Táto aplikácia ponúka 10 rôznych operácií s PDF súbormi.</p>
-                <div class="manual-image">
-                    <img src="{{ asset('images/manual/main-interface.png') }}" alt="Hlavné rozhranie aplikácie" class="img-fluid">
-                    <p class="image-caption">Obrázok 1: Hlavné rozhranie aplikácie</p>
-                </div>
-            </section>
+        <section id="uvod" class="manual-section">
+            <h2>Úvod</h2>
+            <p>Vitajte v používateľskej príručke pre aplikáciu MyABe-PDF. Táto webová aplikácia, vytvorená v Laraveli, ponúka 10 praktických nástrojov na úpravu PDF dokumentov. Aplikácia využíva Laravel Breeze starter kit pre registráciu a prihlasovanie používateľov.</p>
+            <p>Aplikácia je dostupná v slovenskom a anglickom jazyku, pričom jazykové nastavenie je možné zmeniť v pravom hornom rohu.</p>
+        </section>
 
-            <section id="registracia" class="manual-section">
-                <h2>2. Registrácia a prihlásenie</h2>
-                <h3>2.1 Registrácia</h3>
+        <section id="zakladne-funkcie" class="manual-section">
+            <h2>Základné funkcie</h2>
+
+            <div class="function-item">
+                <h3>1. Zlúčenie PDF</h3>
                 <ol>
-                    <li>Kliknite na "Registrovať" v pravom hornom rohu</li>
-                    <li>Vyplňte požadované údaje (e-mail, heslo)</li>
-                    <li>Potvrďte registráciu kliknutím na odkaz v overovacom e-maile</li>
+                    <li>Kliknite na "Zlúčiť PDF"</li>
+                    <li>Vyberte súbory pomocou tlačidla "Vyber súbory" (môžete vybrať viacero súborov naraz)</li>
+                    <li>Po načítaní súborov kliknite na "Zlúčiť"</li>
+                    <li>Stiahnite si výsledný zlúčený dokument</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>2. Rozdelenie PDF</h3>
+                <ol>
+                    <li>Kliknite na "Rozdeľ PDF"</li>
+                    <li>Nahrajte súbor, ktorý chcete rozdeliť</li>
+                    <li>Zadajte rozsahy strán alebo označte miesta rozdelenia</li>
+                    <li>Kliknite na "Rozdeľ" a stiahnite si výsledné časti</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>3. Odomknutie PDF</h3>
+                <ol>
+                    <li>Kliknite na "Odomkni PDF"</li>
+                    <li>Nahrajte chránený súbor</li>
+                    <li>Zadajte heslo (ak ho poznáte)</li>
+                    <li>Stiahnite si odomknutú verziu dokumentu</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="pokrocile-funkcie" class="manual-section">
+            <h2>Pokročilé funkcie</h2>
+
+            <div class="function-item">
+                <h3>4. Zamknutie PDF</h3>
+                <ol>
+                    <li>Kliknite na "Zamkni PDF"</li>
+                    <li>Nahrajte súbor</li>
+                    <li>Nastavte požadované heslo a úroveň ochrany</li>
+                    <li>Stiahnite si chránený dokument</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>5. Odstránenie strán</h3>
+                <ol>
+                    <li>Vyberte "Odstráň stránky"</li>
+                    <li>Nahrajte súbor</li>
+                    <li>Označte stránky, ktoré chcete odstrániť</li>
+                    <li>Uložte si upravený dokument</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>6. Extrahovanie strán</h3>
+                <ol>
+                    <li>Kliknite na "Extrahuj stránky"</li>
+                    <li>Nahrajte súbor</li>
+                    <li>Vyberte stránky, ktoré chcete extrahovať</li>
+                    <li>Stiahnite si výber</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>7. Pridanie strán</h3>
+                <ol>
+                    <li>Vyberte "Pridaj stránky"</li>
+                    <li>Nahrajte hlavný dokument</li>
+                    <li>Pridajte ďalšie stránky z iného súboru</li>
+                    <li>Určte pozíciu vloženia</li>
+                    <li>Uložte výsledok</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>8. Vytvorenie PDF</h3>
+                <ol>
+                    <li>Kliknite na "Vytvor PDF"</li>
+                    <li>Nahrajte zdrojové súbory (Word, Excel, obrázky)</li>
+                    <li>Upravte poradie a nastavenia</li>
+                    <li>Vytvorte a stiahnite si nový PDF dokument</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>9. Konverzia PDF do Wordu</h3>
+                <ol>
+                    <li>Vyberte "PDF do Wordu"</li>
+                    <li>Nahrajte PDF súbor</li>
+                    <li>Počkajte na dokončenie konverzie</li>
+                    <li>Stiahnite si Word dokument</li>
+                </ol>
+            </div>
+
+            <div class="function-item">
+                <h3>10. Konverzia JPG na PDF</h3>
+                <ol>
+                    <li>Kliknite na "JPG na PDF"</li>
+                    <li>Nahrajte jeden alebo viac obrázkov</li>
+                    <li>Upravte poradie a orientáciu</li>
+                    <li>Konvertujte a stiahnite si výsledné PDF</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="api" class="manual-section">
+            <h2>API prístup</h2>
+            <div class="function-item">
+                <h3>Používanie API kľúčov</h3>
+
+                <p>Pre prístup k API funkciám je potrebné generovať API kľúč:</p>
+
+                <ol>
+                    <li>V menu prejdite do "Môj profil" a otvorte sekciu "API kľúče"</li>
+                    <li>Zadajte popisný názov pre váš kľúč</li>
+                    <li>Kliknite na "VYTVORIŤ KĽÚČ"</li>
+                    <li>Nový API kľúč sa zobrazí - nezabudnite si ho uložiť, lebo sa zobrazí len raz!</li>
                 </ol>
 
-                <h3>2.2 Prihlásenie</h3>
-                <ol>
-                    <li>Zadajte svoje prihlasovacie údaje</li>
-                    <li>Kliknite na "Prihlásiť sa"</li>
-                </ol>
-                <div class="manual-image">
-                    <img src="{{ asset('images/manual/login-screen.png') }}" alt="Prihlasovacia obrazovka" class="img-fluid">
-                    <p class="image-caption">Obrázok 2: Prihlasovacia obrazovka</p>
-                </div>
-            </section>
-
-            <section id="zakladne-operacie" class="manual-section">
-                <h2>3. Základné operácie</h2>
-
-                <article id="merge" class="operation-guide">
-                    <h3>3.1 Spájanie PDF súborov</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Spojiť PDF"</li>
-                        <li>Nahrajte 2 alebo viac PDF súborov</li>
-                        <li>Zadajte názov výstupného súboru</li>
-                        <li>Kliknite na "Spustiť operáciu"</li>
-                        <li>Stiahnite si výsledný súbor</li>
-                    </ol>
-                    <div class="manual-image">
-                        <img src="{{ asset('images/manual/merge-interface.png') }}" alt="Rozhranie pre spájanie PDF" class="img-fluid">
-                        <p class="image-caption">Obrázok 3: Rozhranie pre spájanie PDF</p>
-                    </div>
-                </article>
-
-                <article id="split" class="operation-guide">
-                    <h3>3.2 Rozdelenie PDF</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Rozdeliť PDF"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zvoľte možnosť rozdelenia:
-                            <ul>
-                                <li><strong>Na jednotlivé strany</strong> - vytvorí samostatné PDF pre každú stranu</li>
-                                <li><strong>Podľa rozsahu</strong> - zadajte rozsah strán (napr. 1-3,5,7-9)</li>
-                            </ul>
-                        </li>
-                        <li>Kliknite na "Spustiť"</li>
-                    </ol>
-                </article>
-
-                <article id="unlock" class="operation-guide">
-                    <h3>3.3 Odomknutie PDF</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Odomknúť PDF"</li>
-                        <li>Nahrajte chránený PDF súbor</li>
-                        <li>Zadajte heslo</li>
-                        <li>Kliknite na "Odomknúť"</li>
-                    </ol>
-                    <div class="note">
-                        <strong>Poznámka:</strong> Táto funkcia funguje len pre PDF súbory chránené heslom, nie pre digitálne podpisané dokumenty.
-                    </div>
-                </article>
-
-                <article id="rotate" class="operation-guide">
-                    <h3>3.4 Otočenie stránky</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Otočiť stránku"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zadajte číslo stránky, ktorú chcete otočiť</li>
-                        <li>Zvoľte uhol otočenia (90°, 180° alebo 270°)</li>
-                        <li>Kliknite na "Otočiť"</li>
-                    </ol>
-                </article>
-
-                <article id="remove" class="operation-guide">
-                    <h3>3.5 Odstránenie stránky</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Odstrániť stránku"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zadajte číslo stránky na odstránenie</li>
-                        <li>Kliknite na "Odstrániť"</li>
-                    </ol>
-                </article>
-            </section>
-
-            <section id="pokrocile-funkcie" class="manual-section">
-                <h2>4. Pokročilé funkcie</h2>
-
-                <article id="extract" class="operation-guide">
-                    <h3>4.1 Extrahovanie stránky</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Extrahovať stránku"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zadajte číslo stránky na extrahovanie</li>
-                        <li>Kliknite na "Extrahovať"</li>
-                    </ol>
-                </article>
-
-                <article id="pagenumber" class="operation-guide">
-                    <h3>4.2 Pridanie číslovania strán</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Pridať číslovanie"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zvoľte pozíciu číslovania (napr. spodný stred)</li>
-                        <li>Zadajte začiatočné číslo (zvyčajne 1)</li>
-                        <li>Kliknite na "Pridať"</li>
-                    </ol>
-                </article>
-
-                <article id="create" class="operation-guide">
-                    <h3>4.3 Vytvorenie PDF</h3>
-                    <ol>
-                        <li>Vyberte operáciu "Vytvoriť PDF"</li>
-                        <li>Zadajte textový obsah</li>
-                        <li>Zadajte názov výstupného súboru</li>
-                        <li>Kliknite na "Vytvoriť"</li>
-                    </ol>
-                </article>
-
-                <article id="pdf2word" class="operation-guide">
-                    <h3>4.4 Konverzia PDF na Word</h3>
-                    <ol>
-                        <li>Vyberte operáciu "PDF na Word"</li>
-                        <li>Nahrajte PDF súbor</li>
-                        <li>Zadajte názov výstupného súboru</li>
-                        <li>Kliknite na "Konvertovať"</li>
-                    </ol>
-                    <div class="note">
-                        <strong>Poznámka:</strong> Formátovanie môže byť pri konverzii mierne zmenené.
-                    </div>
-                </article>
-
-                <article id="jpg2pdf" class="operation-guide">
-                    <h3>4.5 Konverzia obrázkov na PDF</h3>
-                    <ol>
-                        <li>Vyberte operáciu "JPG na PDF"</li>
-                        <li>Nahrajte jeden alebo viac obrázkov</li>
-                        <li>Zvoľte orientáciu stránky (na výšku alebo na šírku)</li>
-                        <li>Zadajte názov výstupného súboru</li>
-                        <li>Kliknite na "Konvertovať"</li>
-                    </ol>
-                </article>
-            </section>
-
-            <section id="admin" class="manual-section">
-                <h2>5. Administrátorský mód</h2>
-                <p>Administrátori majú prístup k:</p>
+                <p>Po vytvorení kľúča:</p>
                 <ul>
-                    <li>Zoznamu všetkých používateľov</li>
-                    <li>Štatistikám používania</li>
-                    <li>Možnosti blokovania používateľov</li>
-                    <li>Nastaveniam aplikácie</li>
+                    <li>Kľúč môžete kedykoľvek zrušiť</li>
+                    <li>Pre každú aplikáciu odporúčame vytvoriť samostatný kľúč</li>
+                    <li>Pri stratení kľúča ho jednoducho zrušte a vytvorte nový</li>
                 </ul>
-                <div class="manual-image">
-                    <img src="{{ asset('images/manual/admin-panel.png') }}" alt="Administrátorský panel" class="img-fluid">
-                    <p class="image-caption">Obrázok 4: Administrátorský panel</p>
-                </div>
-            </section>
 
-            <section id="faq" class="manual-section">
-                <h2>6. Časté otázky</h2>
+                <p class="text-warning"><strong>Upozornenie:</strong> API kľúč je rovnako citlivý ako vaše heslo. Chráňte ho pred zneužitím.</p>
+            </div>
+        </section>
 
-                <div class="faq-item">
-                    <h3>Aké veľké PDF súbory môžem spracovávať?</h3>
-                    <p>Maximálna veľkosť súboru je 10 MB pre základných používateľov a 50 MB prémiových používateľov.</p>
-                </div>
+        <section id="admin" class="manual-section">
+            <h2>Admin funkcie</h2>
+            <div class="function-item">
+                <h3>Prehľad API volaní</h3>
 
-                <div class="faq-item">
-                    <h3>Je možné vrátiť zmeny?</h3>
-                    <p>Nie, všetky operácie sú finálne. Odporúčame si vždy uložiť pôvodnú verziu dokumentu.</p>
-                </div>
+                <ul>
+                    <li>Prezerať históriu API volaní</li>
+                    <li>Mazať celu históriu</li>
+                    <li>Exportovať záznamy do CSV formátu</li>
+                </ul>
+            </div>
+        </section>
 
-                <div class="faq-item">
-                    <h3>Ktoré formáty obrázkov podporuje konverzia na PDF?</h3>
-                    <p>Aplikácia podporuje formáty JPG, PNG a BMP.</p>
-                </div>
-
-                <div class="faq-item">
-                    <h3>Ako sa stať prémiovým používateľom?</h3>
-                    <p>Prémiové účty sú dostupné po zakúpení predplatného v sekcii "Nastavenia účtu".</p>
-                </div>
-            </section>
-        </div>
 
         <div class="manual-footer">
             <p>Posledná aktualizácia: {{ now()->format('d.m.Y') }}</p>
-            <p>© 2023 PDF Editor App. Všetky práva vyhradené.</p>
         </div>
     </div>
 
+    <style>
+        .manual-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        .language-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .language-switcher .active {
+            background-color: #3490dc;
+            color: white;
+        }
+
+        .manual-title {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+
+        .manual-toc {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .manual-section {
+            margin-bottom: 40px;
+        }
+
+        .function-item, .faq-item {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .function-item h3, .faq-item h3 {
+            color: #3490dc;
+            margin-top: 0;
+        }
+
+        .manual-footer {
+            text-align: center;
+            margin-top: 50px;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+
+        ol, ul {
+            padding-left: 20px;
+        }
+
+        .download-btn {
+            background: #1976d2; color: #fff; border: none; padding: 12px 24px;
+            border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
+            transition: background 0.2s; 
+        }
+
+        .download-btn:hover {
+            background: #155a8a;
+        }
+    </style>
 </x-app-layout>
