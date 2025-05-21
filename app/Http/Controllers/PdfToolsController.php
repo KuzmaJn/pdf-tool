@@ -399,4 +399,54 @@ class PdfToolsController extends Controller
         ]);
     }
 
+    //
+    // EXTRACT PAGE 
+    public function extractPage(Request $request)
+    {
+        // Validácia vstupov
+        $request->validate([
+            'pdf' => 'required|file|mimes:pdf',
+            'page_number' => 'required|integer|min:1'
+        ]);
+
+        // Uloženie PDF do dočasného súboru
+        $pdfPath = $this->saveTmpFile($request->file('pdf'), 0);
+        $pageNumber = $request->input('page_number');
+
+        // Vytvorenie výstupného priečinka
+        $this->ensureOutputDirExists();
+
+        // Výstupný súbor
+        $outputName = 'extracted_' . Str::uuid() . '.pdf';
+        $outputPath = storage_path("app/public/output/{$outputName}");
+
+        // Spustenie Python skriptu
+        $process = new Process([
+            'python3',
+            base_path('python/extract.py'),
+            $pdfPath,
+            $pageNumber,
+            $outputPath
+        ]);
+
+        try {
+            $process->mustRun();
+        } catch (ProcessFailedException $exception) {
+            $this->cleanFiles([$pdfPath]);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Extraction failed',
+                'error' => $this->extractPythonError($exception->getMessage())
+            ], 500);
+        }
+
+        // Vyčistenie dočasných súborov
+        $this->cleanFiles([$pdfPath]);
+
+        return response()->json([
+            'status' => 'success',
+            'processed_file' => asset("storage/output/{$outputName}")
+        ]);
+    }
 }

@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/lock', 'lock')->name('pdf.lock');
         Route::post('/rotate', 'rotate')->name('pdf.rotate');
         Route::post('/removePage', 'removePage')->name('pdf.removePage');
+        Route::post('/extractPage', 'extractPage')->name('pdf.extractPage');
         
     });
 });
