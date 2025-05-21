@@ -391,7 +391,7 @@ class PdfToolsController extends Controller
 
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('removePage', $location);
+        \App\Models\History::record('remove_page', $location);
 
         return response()->json([
             'status' => 'success',
@@ -446,6 +446,9 @@ class PdfToolsController extends Controller
 
         // Vyčistenie dočasných súborov
         $this->cleanFiles([$pdfPath]);
+
+        $location = \App\Models\History::resolveLocation($request);
+        \App\Models\History::record('extract_page', $location);
 
         return response()->json([
             'status' => 'success',
@@ -516,7 +519,6 @@ class PdfToolsController extends Controller
             'processed_file' => asset("storage/output/{$outputName}"),
         ]);
     }
-
 
 
     //
