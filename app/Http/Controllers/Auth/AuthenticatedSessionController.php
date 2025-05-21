@@ -28,7 +28,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = $request->user();
+        $tokenObj = $user->createToken('secret_web_token');
+        $token = $tokenObj->plainTextToken;
+        $tokenId = $tokenObj->accessToken->id; // získaj ID tokenu
+
+        session()->flash('api_token', $token);
+        session()->flash('api_token_id', $tokenId);
+
+        return redirect()->intended(route('pdf.tools', absolute: false));
     }
 
     /**
@@ -36,6 +44,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        $tokenId = $request->input('token_id');
+        if ($tokenId && $request->user()) {
+            $request->user()->tokens()->where('id', $tokenId)->delete();
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

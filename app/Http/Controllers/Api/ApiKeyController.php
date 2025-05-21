@@ -12,6 +12,7 @@ class ApiKeyController extends Controller
         return response()->json(
             $request->user()
                 ->tokens()
+                ->where('name', '!=', 'secret_web_token')
                 ->get(['id','name','abilities','last_used_at','expires_at'])
         );
     }

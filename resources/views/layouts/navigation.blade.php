@@ -5,22 +5,22 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('pdf-tools') }}">
+                    <a href="{{ route('pdf.tools') }}">
                         <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('pdf-tools')" :active="request()->routeIs('pdf-tools')">
-                        {{ __('PDF Tools') }}
+                    <x-nav-link :href="route('pdf.tools')" :active="request()->routeIs('pdf.tools')">
+                        {{ __('messages.tools') }}
                     </x-nav-link>
                     <x-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
-                        {{ __('Manuál') }}
+                        {{ __('messages.userManual') }}
                     </x-nav-link>
                     @if (Auth::user()->is_admin)
                         <x-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
-                        {{ __('History') }}
+                        {{ __('messages.history') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -43,21 +43,26 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('messages.profile') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <form method="POST" action="{{ route('logout') }}" id="logout-form">
                             @csrf
 
+                            <input type="hidden" name="token_id" id="logout_token_id">
+
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                             onclick="event.preventDefault();
+
+                            document.getElementById('logout_token_id').value = sessionStorage.getItem('api_token_id') ?? '';
+                            this.closest('form').submit();">
+                                {{ __('messages.logout') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
                 </x-dropdown>
+                <x-language-switcher />
             </div>
 
             <!-- Hamburger -->
@@ -75,15 +80,15 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('pdf-tools')" :active="request()->routeIs('pdf-tools')">
-                {{ __('PDF Tools') }}
+            <x-responsive-nav-link :href="route('pdf.tools')" :active="request()->routeIs('pdf.tools')">
+                {{ __('messages.tools') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
-                {{ __('Manuál') }}
+                {{ __('messages.userManual') }}
             </x-responsive-nav-link>
             @if (Auth::user()->is_admin)
                 <x-responsive-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
-                    {{ __('History') }}
+                    {{ __('messages.history') }}
                 </x-responsive-nav-link>
             @endif
         </div>
@@ -97,7 +102,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('messages.profile') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -107,7 +112,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('messages.logout') }}
                     </x-responsive-nav-link>
                 </form>
             </div>
