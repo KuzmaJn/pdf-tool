@@ -433,11 +433,14 @@ class PdfToolsController extends Controller
             $process->mustRun();
         } catch (ProcessFailedException $exception) {
             $this->cleanFiles([$pdfPath]);
+            $fullError = $exception->getMessage();
+            $cleanError = $this->extractPythonError($fullError);
 
             return response()->json([
                 'status' => 'error',
                 'message' => 'Extraction failed',
-                'error' => $this->extractPythonError($exception->getMessage())
+                'error' => $fullError,
+                'cleanError' => $cleanError
             ], 500);
         }
 
