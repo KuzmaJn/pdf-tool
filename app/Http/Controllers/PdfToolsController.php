@@ -151,8 +151,19 @@ class PdfToolsController extends Controller
         // Uloženie zlúčeného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
+        // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('merge', $location);
+        \App\Models\History::record('merge', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -253,9 +264,19 @@ class PdfToolsController extends Controller
         Storage::disk('public')->put("output/{$outputName1}", file_get_contents($outputPath1));
         Storage::disk('public')->put("output/{$outputName2}", file_get_contents($outputPath2));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('split', $location);
+        \App\Models\History::record('split', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -338,9 +359,19 @@ class PdfToolsController extends Controller
         // Uloženie výsledného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('unlock', $location);
+        \App\Models\History::record('unlock', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -519,9 +550,19 @@ class PdfToolsController extends Controller
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('rotate', $location);
+        \App\Models\History::record('rotate', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -598,9 +639,19 @@ class PdfToolsController extends Controller
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('remove_page', $location);
+        \App\Models\History::record('remove_page', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -704,8 +755,21 @@ class PdfToolsController extends Controller
         // Vyčistenie dočasných súborov
         $this->cleanFiles([$pdfPath]);
 
+        Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
+
+         // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
+        // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('extract_page', $location);
+        \App\Models\History::record('extract_page', $location,$interface);
 
         return response()->json([
             'status' => 'success',
@@ -798,9 +862,19 @@ class PdfToolsController extends Controller
         // uloženie výsledku do public/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
-        // záznam do histórie
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
+        // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('add_page_numbers', $location);
+        \App\Models\History::record('add_page_numbers', $location,$interface);
 
         return response()->json([
             'status'         => 'success',
@@ -913,9 +987,19 @@ class PdfToolsController extends Controller
             ], 500);
         }
 
-        // Záznam do histórie
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
+        // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('create', $location);
+        \App\Models\History::record('create', $location,$interface);
 
         return response()->json([
             'status'         => 'success',
@@ -1003,9 +1087,19 @@ class PdfToolsController extends Controller
         // Uloženie výsledného PDF do storage/output
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
-        // Záznam do histórie
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
+        // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('watermark', $location);
+        \App\Models\History::record('watermark', $location,$interface);
 
         return response()->json([
             'status'         => 'success',
