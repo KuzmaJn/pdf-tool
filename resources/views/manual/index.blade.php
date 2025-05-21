@@ -3,10 +3,11 @@
 
         <h1 class="manual-title">Používateľská príručka - MyABe-PDF</h1>
         <div class="manual-actions">
-            <a href="{{ route('manual.download') }}" class="btn btn-primary">
+            <a href="{{ route('manual.download') }}" class="download-btn btn-primary">
                 <i class="fas fa-file-pdf"></i> Stiahnuť PDF verziu
             </a>
         </div>
+        <br>
         <div class="manual-toc">
             <h2>Obsah</h2>
             <ul>
@@ -238,6 +239,16 @@
 
         ol, ul {
             padding-left: 20px;
+        }
+
+        .download-btn {
+            background: #1976d2; color: #fff; border: none; padding: 12px 24px;
+            border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
+            transition: background 0.2s; 
+        }
+
+        .download-btn:hover {
+            background: #155a8a;
         }
     </style>
 </x-app-layout>
