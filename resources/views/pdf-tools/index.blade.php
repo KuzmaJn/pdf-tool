@@ -69,7 +69,7 @@
         <div class="tile" data-action="rotate">Rotate Page</div>
         <div class="tile" data-action="removePage">Remove Page</div>
         <div class="tile" data-action="extractPage">Extract Page</div>
-        <div class="tile" data-action="numberPages">Add Page Numbers</div>
+        <div class="tile" data-action="numberPages">Number Pages</div>
         <div class="tile" data-action="create">Create PDF</div>
         <div class="tile" data-action="addWatermark">Add Watermark</div>
     </div>
