@@ -80,6 +80,13 @@
     <div id="output"></div>
 </div>
 
+@if (session('api_token') && session('api_token_id'))
+    <script>
+        sessionStorage.setItem('api_token', "{{ session('api_token') }}");
+        sessionStorage.setItem('api_token_id', "{{ session('api_token_id') }}");
+    </script>
+@endif
+
 <script>
     const tiles = document.querySelectorAll('.tile');
     const inputsArea = document.getElementById('inputsArea');
@@ -253,11 +260,11 @@
                 Laboris cupidatat do dolore nisi elit qui aute sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
 
                 Ea deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
-                
+
                 Nulla sit excepteur occaecat magna velit. Officia do velit pariatur cillum. Et consectetur nulla sint elit adipisicing anim cillum voluptate laboris excepteur est ce sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
 
                 Lit qui aute nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint. Creatur nasca pes deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
-                
+
                 Ut laborum enim qui ullamco enim adipisicing magna nostrud deserunt. Sunt fugiat nostrud mollit proident in pariatur magna ex. Minim labore nostrud do cupidatat ut ullamco ex aute quis laboris quis deserunt aute laborum. Consectetur qui id pariatur est aliqua. Aliquip exercitation officia reprehenderit dolore non cillum eu laborum elit. Voluptate tempor irure sint fugiat ex quis culpa aliquip irure ex anim deserunt ipsum. Elit incididunt deserunt minim esse consectetur qui est labore pariatur nostrud ea.
 
                 Nostrud duis adipisicing officia irure amet nisi nulla dolor deserunt. Cillum veniam irure cillum enim commodo anim cillum. Elit magna magna id amet laboris do est nulla in. Exercitation in dolor cupidatat ut sunt veniam eu laborum id deserunt. Qui labore ullamco exercitation ut incididunt dolore commodo aliqua do. Occaecat culpa dolor amet sunt dolore adipisicing elit amet et sunt quis Lorem. Proident irure ipsum labore consequat aute ex proident commodo ipsum. Proident non consequat est ut fugiat culpa consequat ad officia cillum commodo in quis consectetur. Id fugiat pariatur reprehenderit ea ut dolore voluptate quis elit. Qui ex excepteur amet do aliquip qui incididunt culpa duis laboris elit nisi sint occaecat. Esse aute ipsum Lorem velit. Ullamco Lorem ullamco labore ullamco pariatur consectetur laboris et incididunt ea.
@@ -307,13 +314,14 @@
         console.log('Action:', actionInput.value);
         const formData = new FormData(this);
         const action = actionInput.value;
-        let url = '/pdf/' + action;
+        let url = 'api/pdf/' + action;
 
         const response = await fetch(url, {
         method: 'POST',
         body: formData,
         headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('api_token'),
         }
         });
 
