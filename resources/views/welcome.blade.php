@@ -35,13 +35,21 @@
                 letter-spacing: 0.02em;
                 text-align: center;
             }
+            #switcherDiv {
+                position: fixed;
+                top: 1.5rem;     /* Adjust spacing from top as needed */
+                right: 1.5rem;   /* Adjust spacing from right as needed */
+                z-index: 100;
+            }
         </style>
 
     </head>
 
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md mx-auto flex flex-col items-center justify-center">
-        <x-language-switcher />
+        <div id="switcherDiv">
+            <x-language-switcher/>
+        </div>
         <div class="text-center">
             <h2 id="heading">MyAB PDF</h2>
             <p id="subheading">{{ __('messages.slogan') }}</p>
@@ -49,8 +57,8 @@
         @if (Route::has('login'))
             <div class="flex flex-row items-center justify-center gap-4 w-full">
                 @auth
-                    <a href="{{ url('/pdf-tools') }}" class="w-full">
-                        <x-primary-button class="w-full text-lg py-3">{{ __('messages.tools') }}</x-primary-button>
+                    <a href="{{ url('/pdf-tools') }}" >
+                        <x-primary-button class="text-lg py-3">{{ __('messages.tools') }}</x-primary-button>
                     </a>
                 @else
                     @if (Route::has('register'))

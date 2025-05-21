@@ -18,13 +18,21 @@
                         {{ __('messages.exportToCSV') }}
                     </x-primary-button>
                 </form>
-                <form method="POST"
-                      action="{{ route('history.destroyAll') }}"
-                      class=""
-                      onsubmit="return confirm('{{ __('messages.deleteAllConfirm') }}');">
+{{--                <form method="POST"--}}
+{{--                      action="{{ route('history.destroyAll') }}"--}}
+{{--                      class=""--}}
+{{--                      onsubmit="return confirm('{{ __('messages.deleteAllConfirm') }}');">--}}
+{{--                    @csrf--}}
+{{--                    @method('DELETE')--}}
+{{--                    <x-danger-button>--}}
+{{--                        {{ __('messages.deleteAll') }}--}}
+{{--                    </x-danger-button>--}}
+{{--                </form>--}}
+
+                <form id="deleteAllForm" method="POST" action="{{ route('history.destroyAll') }}">
                     @csrf
                     @method('DELETE')
-                    <x-danger-button>
+                    <x-danger-button type="button" onclick="showDeleteAllModal()">
                         {{ __('messages.deleteAll') }}
                     </x-danger-button>
                 </form>
@@ -68,4 +76,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete All Confirmation Modal -->
+    <div id="deleteAllModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50 hidden">
+        <div class="bg-white rounded p-6 shadow-lg max-w-sm sm:max-w-xs text-center">
+            <p class="mb-6 text-center">{{ __('messages.deleteAllConfirm') }}</p>
+            <div class="flex justify-center space-x-4">
+                <div class="px-2">
+                    <x-secondary-button onclick="closeDeleteAllModal()">
+                        {{ __('messages.cancel') }}
+                    </x-secondary-button>
+                </div>
+                <x-danger-button onclick="proceedDeleteAll()">
+                    {{ __('messages.deleteAll') }}
+                </x-danger-button>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
+
+<script>
+    function showDeleteAllModal() {
+        document.getElementById('deleteAllModal').classList.remove('hidden');
+    }
+    function closeDeleteAllModal() {
+        document.getElementById('deleteAllModal').classList.add('hidden');
+    }
+    function proceedDeleteAll() {
+        document.getElementById('deleteAllForm').submit();
+    }
+</script>

@@ -53,11 +53,11 @@
                 x-model.number="newExpires"
                 class="mt-1 block w-full border-gray-300 rounded-md"
             >
-                <option value="60">{{ __('1 hodina') }}</option>
-                <option value="1440">{{ __('1 deň') }}</option>
-                <option value="10080">{{ __('1 týždeň') }}</option>
-                <option value="43200">{{ __('1 mesiac') }}</option>
-                <option value="525000">{{ __('1 rok') }}</option>
+                <option value="60">{{ __('messages.1hour') }}</option>
+                <option value="1440">{{ __('messages.1day') }}</option>
+                <option value="10080">{{ __('messages.1week') }}</option>
+                <option value="43200">{{ __('messages.1month') }}</option>
+                <option value="525000">{{ __('messages.1year') }}</option>
             </select>
         </div>
 
@@ -131,7 +131,7 @@
             },
 
             async deleteKey(id) {
-                if (!confirm('{{ __('messages.reallyDeleteKey') }}')) return;
+                {{--if (!confirm('{{ __('messages.reallyDeleteKey') }}')) return;--}}
                 await fetch(`/api-keys/${id}`, {
                     method: 'DELETE',
                     headers: {
