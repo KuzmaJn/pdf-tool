@@ -58,10 +58,6 @@
     .range-inputs { display: flex; gap: 10px; }
     .range-inputs input { flex: 1; }
     .file-preview { margin-top: 10px; max-width: 100%; }
-    .hidden {
-        display: none !important;
-    }
-
     /* Spinner element */
     .spinner {
         display: inline-block;
