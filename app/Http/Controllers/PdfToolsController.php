@@ -458,7 +458,6 @@ class PdfToolsController extends Controller
 
     //
     // ADD PAGE NUMBERS
-    // ADD PAGE NUMBERS
     public function numberPages(Request $request)
     {
         $request->validate([

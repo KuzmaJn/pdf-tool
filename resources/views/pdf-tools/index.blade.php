@@ -58,6 +58,75 @@
     .range-inputs { display: flex; gap: 10px; }
     .range-inputs input { flex: 1; }
     .file-preview { margin-top: 10px; max-width: 100%; }
+    /* Spinner element */
+    .spinner {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        margin-top:6px;
+        border: 3px solid rgba(0, 0, 0, 0.1);
+        border-top-color: rgba(0, 0, 0, 0.6);
+        border-radius: 50%;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    #processText {
+        margin: 160px 0;
+    }
+
+    /* Spinner animation */
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .okayBtn {
+        background: #1976d2; color: #fff; border: none; padding: 10px 20px;
+        border-radius: 4px; cursor: pointer; margin-top: 8px; text-decoration: none;
+        display: inline-block;
+    }
+
+    /* Výstupný box – štandardné rozloženie */
+    .pdf-tools--output {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    color: #fff;
+    }
+
+    /* Variant Error (červené pozadie, menej výrazné) */
+    .pdf-tools--output--error {
+        background-color: rgba(220, 53, 69, 0.9); /* tmavšie-červené so 90% krytím */
+    }
+    .pdf-tools--output--info {
+        background-color: rgba(255, 193, 7, 0.9); /* tmavšie-žlté so 90% krytím */
+    }
+
+    /* Text vo vnútri */
+    .pdf-tools--output-text {
+    flex: 1;          /* roztiahne sa na maximum */
+    line-height: 1.4;
+    }
+
+    /* Tlačidlo “Okay” */
+    .pdf-tools--okay-btn {
+    background-color: #c82333; /* sýta červená */
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.2s;
+    }
+    .pdf-tools--okay-btn:hover {
+    background-color: #a71d2a; /* tmavšia na hover */
+    }
+
 </style>
 
 <div class="container">
@@ -80,17 +149,28 @@
         <div id="inputsArea">
             <!-- Dynamic inputs will appear here -->
         </div>
-        <button type="submit" id="submitBtn" disabled>{{ __('messages.process') }}</button>
+        <button type="submit" id="submitBtn" disabled>
+            <span id="processText">{{ __('messages.process') }}</span>
+        </button>
     </form>
 
-    <div id="output"></div>
+    <div id="output">
+    </div>
 </div>
+
+@if (session('api_token') && session('api_token_id'))
+    <script>
+        sessionStorage.setItem('api_token', "{{ session('api_token') }}");
+        sessionStorage.setItem('api_token_id', "{{ session('api_token_id') }}");
+    </script>
+@endif
 
 <script>
     const tiles = document.querySelectorAll('.tile');
     const inputsArea = document.getElementById('inputsArea');
     const actionInput = document.getElementById('actionInput');
     const submitBtn = document.getElementById('submitBtn');
+    const output = document.getElementById('output');
 
     const inputTemplates = {
         tmpOutputNameFile: `
@@ -304,27 +384,86 @@
 
     function clearOutput() {
         document.getElementById('output').innerHTML = '';
+        document.getElementById('output').classList = '';
+    }
+
+    function createOutputElement(message) {
+        // Vrátime tlačidlo “Okay”
+        const okayBtn = document.createElement('button');
+        okayBtn.className = 'pdf-tools--okay-btn';
+        okayBtn.innerText = 'Okay';
+        okayBtn.addEventListener('click', () => {
+            submitBtn.disabled = false;
+            clearOutput();
+        });
+
+        // Nájdeme výstupný div, vyčistíme ho a pridáme jednu CSS-triedu
+        output.innerHTML = '';
+        output.className = 'pdf-tools--output pdf-tools--output--error';
+
+        // Správa
+        const txt = document.createElement('span');
+        txt.className = 'pdf-tools--output-text';
+        txt.innerText = message;
+        collapseDoubleBR(txt);
+
+        output.appendChild(txt);
+        output.appendChild(okayBtn);
+
+    }
+
+    function collapseDoubleBR(el) {
+        let html = el.innerHTML;
+        // kým nájdeš aspoň jedno <br><br>, zameníš ho za jeden:
+        while (html.indexOf('<br><br>') !== -1) {
+            html = html.replace('<br><br>', '<br>');
+        }
+        el.innerHTML = html;
+    }
+
+    function inicializeSpinner() {
+        //Inicializuj spinner a načítavanie
+        const spinner = document.createElement('span');
+        spinner.className = 'spinner';
+        spinner.id = 'spinner';
+
+        output.innerHTML = '';
+        output.style.justifyContent = 'center';
+        output.appendChild(spinner);
+
+        //vytvor text element
+        const txt = document.createElement('span');
+        txt.innerHTML = 'Spracovávam...';
+        output.appendChild(txt);
+        output.className = 'pdf-tools--output pdf-tools--output--info';
     }
 
     // Handle form submission
     document.getElementById('pdfForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        console.log('Form data:', new FormData(this));
-        console.log('Action:', actionInput.value);
+
+        // Zobraz spinner
+        inicializeSpinner();
+
+        //Deaktivuj tlačidlo
+        submitBtn.disabled = true;
+
         const formData = new FormData(this);
         const action = actionInput.value;
-        let url = '/pdf/' + action;
+        let url = 'api/pdf/' + action;
 
         const response = await fetch(url, {
         method: 'POST',
         body: formData,
         headers: {
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + sessionStorage.getItem('api_token'),
         }
         });
 
         const data = await response.json();
         if (response.ok) {
+        clearOutput();
         console.log('Úspech: ' + JSON.stringify(data));
         if (data.status === 'success') {
             if (action == "split") {
@@ -340,12 +479,10 @@
                 </div>`;
             }
         } else {
-            document.getElementById('output').innerHTML =
-            `<div class="output" style="background-color: #dc3545;">@lang('messages.error') ${data.message ?? '@lang('messages.unknownError')'}</div>`;
+            createOutputElement(`@lang('messages.error') ${data.message ?? '@lang('messages.unknownError')'}`);
         }
         } else {
-        document.getElementById('output').innerHTML =
-            `<div class="output" style="background-color: #dc3545;">(@lang('messages.error') ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}</div>`;
+            createOutputElement(`(@lang('messages.error') ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}`);
         }
     });
 
