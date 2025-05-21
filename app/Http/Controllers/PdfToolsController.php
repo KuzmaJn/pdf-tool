@@ -427,9 +427,19 @@ class PdfToolsController extends Controller
 
         Storage::disk('public')->put("output/{$outputName}", file_get_contents($outputPath));
 
+        // zisti si aktuálny token (ak vôbec je)
+        $token = $request->user()?->currentAccessToken();
+
+        // ak to je ten “front-end” token, označ to ako web, inak ako api
+        if ($token && $token->name === 'secret_web_token') {
+            $interface = 'web';
+        } else {
+            $interface = 'api';
+        }
+
         // Uloženie do histórie
         $location = \App\Models\History::resolveLocation($request);
-        \App\Models\History::record('lock', $location);
+        \App\Models\History::record('lock', $location,$interface);
 
         return response()->json([
             'status' => 'success',
