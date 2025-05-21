@@ -18,16 +18,6 @@
                         {{ __('messages.exportToCSV') }}
                     </x-primary-button>
                 </form>
-{{--                <form method="POST"--}}
-{{--                      action="{{ route('history.destroyAll') }}"--}}
-{{--                      class=""--}}
-{{--                      onsubmit="return confirm('{{ __('messages.deleteAllConfirm') }}');">--}}
-{{--                    @csrf--}}
-{{--                    @method('DELETE')--}}
-{{--                    <x-danger-button>--}}
-{{--                        {{ __('messages.deleteAll') }}--}}
-{{--                    </x-danger-button>--}}
-{{--                </form>--}}
 
                 <form id="deleteAllForm" method="POST" action="{{ route('history.destroyAll') }}">
                     @csrf

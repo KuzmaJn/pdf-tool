@@ -1,6 +1,6 @@
 <?php
 return [
-    'welcome' => 'Vitajte na našej webovej stránke!',
+    'manualHeader' => 'Používateľská príručka',
     'dashboard' => 'Ovládací panel',
     'slogan' => 'Vaše obľúbené PDF nástroje',
     'login' => 'Prihlásiť sa',
@@ -75,12 +75,8 @@ return [
     // Added keys for verify-email translations
     'verifyEmailPrompt' => 'Ďakujeme za registráciu! Pred začatím prosím overte svoju e-mailovú adresu kliknutím na odkaz, ktorý sme vám práve poslali. Ak ste e-mail neobdržali, radi vám zašleme ďalší.',
     'resendVerificationEmail' => 'Odoslať overovací e-mail znova',
-    'logout' => 'Odhlásiť sa',
 
     // Added translations for reset-password
-    'email' => 'Email',
-    'password' => 'Heslo',
-    'confirmPassword' => 'Potvrďte heslo',
     'resetPassword' => 'Obnoviť heslo',
 
     // Added keys from instructions
@@ -106,6 +102,7 @@ return [
     'createPdf' => 'Vytvoriť PDF',
     'addWatermark' => 'Pridať vodoznak',
     'process' => 'Spracovať',
+
     // Inputs/labels
     'outputFileName' => 'Názov výstupného súboru',
     'pdfFilesToMerge' => 'PDF súbory na zlúčenie',
@@ -156,4 +153,40 @@ return [
     'downloadPdf' => 'Stiahnuť PDF',
     'error' => 'Chyba:',
     'unknownError' => 'Neznáma chyba',
+
+
+    'downloadPdfVersion' => 'Stiahnuť PDF verziu',
+    'contents' => 'Obsah',
+    'introduction' => 'Úvod',
+    'basicFunctions' => 'Základné funkcie',
+    'advancedFunctions' => 'Pokročilé funkcie',
+    'apiAccess' => 'API prístup',
+    'adminFunctions' => 'Admin funkcie',
+    'faq' => 'Často kladené otázky',
+    'lastUpdated' => 'Posledná aktualizácia:',
+    'mergePdfTitle' => '1. Zlúčenie PDF',
+    'splitPdfTitle' => '2. Rozdelenie PDF',
+    'unlockPdfTitle' => '3. Odomknutie PDF',
+    'lockPdfTitle' => '4. Zamknutie PDF',
+    'removePagesTitle' => '5. Odstránenie strán',
+    'extractPagesTitle' => '6. Extrahovanie strán',
+    'addPagesTitle' => '7. Pridanie strán',
+    'createPdfTitle' => '8. Vytvorenie PDF',
+    'convertPdfToWordTitle' => '9. Konverzia PDF do Wordu',
+    'convertJpgToPdfTitle' => '10. Konverzia JPG na PDF',
+    'download' => 'Stiahnuť',
+    'uploadFile' => 'Nahrať súbor',
+    'selectFiles' => 'Vybrať súbory',
+    'setPassword' => 'Nastaviť heslo',
+    'setProtectionLevel' => 'Nastaviť úroveň ochrany',
+    'editOrderAndSettings' => 'Upraviť poradie a nastavenia',
+    'convertAndDownload' => 'Konvertovať a stiahnuť',
+    'waitForConversion' => 'Počkajte na dokončenie konverzie',
+    'enterDescription' => 'Zadajte popis',
+    'createKeyBtn' => 'VYTVORIŤ KĽÚČ',
+    'warning' => 'Upozornenie',
+    'apiKeyIsSensitive' => 'API kľúč je rovnako citlivý ako vaše heslo. Chráňte ho pred zneužitím.',
+    'viewApiHistory' => 'Prezerať históriu API volaní',
+    'deleteAllHistory' => 'Mazať celu históriu',
+    'exportToCsv' => 'Exportovať záznamy do CSV formátu',
 ];
