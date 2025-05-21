@@ -57,7 +57,7 @@
                 <option value="1440">{{ __('1 deň') }}</option>
                 <option value="10080">{{ __('1 týždeň') }}</option>
                 <option value="43200">{{ __('1 mesiac') }}</option>
-                <option value="">{{ __('Nikdy') }}</option>
+                <option value="525000">{{ __('1 rok') }}</option>
             </select>
         </div>
 
