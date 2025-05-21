@@ -2,7 +2,7 @@
 
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-        {{ __('PDF Tools') }}
+        {{ __('messages.tools') }}
     </h2>
 </x-slot>
 
@@ -62,16 +62,16 @@
 
 <div class="container">
     <div class="tiles">
-        <div class="tile active" data-action="merge">Merge PDF</div>
-        <div class="tile" data-action="split">Split PDF</div>
-        <div class="tile" data-action="unlock">Unlock PDF</div>
-        <div class="tile" data-action="lock">Lock PDF</div>
-        <div class="tile" data-action="rotate">Rotate Page</div>
-        <div class="tile" data-action="removePage">Remove Page</div>
-        <div class="tile" data-action="extractPage">Extract Page</div>
-        <div class="tile" data-action="numberPages">Add Page Numbers</div>
-        <div class="tile" data-action="create">Create PDF</div>
-        <div class="tile" data-action="addWatermark">Add Watermark</div>
+        <div class="tile active" data-action="merge">{{ __('messages.mergePdf') }}</div>
+        <div class="tile" data-action="split">{{ __('messages.splitPdf') }}</div>
+        <div class="tile" data-action="unlock">{{ __('messages.unlockPdf') }}</div>
+        <div class="tile" data-action="lock">{{ __('messages.lockPdf') }}</div>
+        <div class="tile" data-action="rotate">{{ __('messages.rotatePage') }}</div>
+        <div class="tile" data-action="removePage">{{ __('messages.removePage') }}</div>
+        <div class="tile" data-action="extractPage">{{ __('messages.extractPage') }}</div>
+        <div class="tile" data-action="numberPages">{{ __('messages.addPageNumbers') }}</div>
+        <div class="tile" data-action="create">{{ __('messages.createPdf') }}</div>
+        <div class="tile" data-action="addWatermark">{{ __('messages.addWatermark') }}</div>
     </div>
 
     <form id="pdfForm" method="POST" action="#" enctype="multipart/form-data">
@@ -80,7 +80,7 @@
         <div id="inputsArea">
             <!-- Dynamic inputs will appear here -->
         </div>
-        <button type="submit" id="submitBtn" disabled>Process</button>
+        <button type="submit" id="submitBtn" disabled>{{ __('messages.process') }}</button>
     </form>
 
     <div id="output"></div>
@@ -95,140 +95,140 @@
     const inputTemplates = {
         tmpOutputNameFile: `
             <div class="form-group">
-                <label for="output_name">Output File Name</label>
+                <label for="output_name">@lang('messages.outputFileName')</label>
                 <input type="text" id="output_name" name="output_name" value="merged.pdf" required>
             </div>
         `,
         merge: `
             <div class="form-group">
-                <label for="pdf_files">PDF Files to Merge</label>
+                <label for="pdf_files">@lang('messages.pdfFilesToMerge')</label>
                 <input type="file" id="pdf_files" name="pdf_files[]" accept="application/pdf" required multiple>
-                <small>Select multiple PDF files to merge</small>
+                <small>@lang('messages.selectMultiplePdfsToMerge')</small>
             </div>
         `,
         split: `
             <div class="form-group">
-                <label for="pdf">PDF File to Split</label>
+                <label for="pdf">@lang('messages.pdfFileToSplit')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label>Split At Page Number</label>
+                <label>@lang('messages.splitAtPageNumber')</label>
                 <input type="number" id="split_page" name="split_page" min="1" value="1">
             </div>
         `,
         lock: `
             <div class="form-group">
-                <label for="pdf">Unprotected PDF File</label>
+                <label for="pdf">@lang('messages.unprotectedPdfFile')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">@lang('messages.password')</label>
                 <input type="password" id="password" name="password" required>
             </div>
         `,
         unlock: `
             <div class="form-group">
-                <label for="pdf">Protected PDF File</label>
+                <label for="pdf">@lang('messages.protectedPdfFile')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">@lang('messages.password')</label>
                 <input type="password" id="password" name="password" required>
             </div>
         `,
         rotate: `
             <div class="form-group">
-                <label for="pdf">PDF File to Rotate</label>
+                <label for="pdf">@lang('messages.pdfFileToRotate')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="page_number">Page Number to Rotate</label>
+                <label for="page_number">@lang('messages.pageNumberToRotate')</label>
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
             <div class="form-group">
-                <label for="rotation_angle">Rotation Angle</label>
+                <label for="rotation_angle">@lang('messages.rotationAngle')</label>
                 <select id="rotation_angle" name="rotation_angle">
-                    <option value="90">90° Clockwise</option>
-                    <option value="180">180°</option>
-                    <option value="270">90° Counter-Clockwise</option>
+                    <option value="90">@lang('messages.rotate90Clockwise')</option>
+                    <option value="180">@lang('messages.rotate180')</option>
+                    <option value="270">@lang('messages.rotate90CounterClockwise')</option>
                 </select>
             </div>
         `,
         removePage: `
             <div class="form-group">
-                <label for="pdf">PDF File to Modify</label>
+                <label for="pdf">@lang('messages.pdfFileToModify')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="page_number">Page Number to Remove</label>
+                <label for="page_number">@lang('messages.pageNumberToRemove')</label>
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
         `,
         extractPage: `
             <div class="form-group">
-                <label for="pdf">PDF File to Extract From</label>
+                <label for="pdf">@lang('messages.pdfFileToExtractFrom')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="page_number">Page Number to Extract</label>
+                <label for="page_number">@lang('messages.pageNumberToExtract')</label>
                 <input type="number" id="page_number" name="page_number" min="1" required>
             </div>
         `,
         numberPages: `
             <div class="form-group">
-                <label for="pdf">PDF File to Number</label>
+                <label for="pdf">@lang('messages.pdfFileToNumber')</label>
                 <input type="file" id="pdf" name="pdf" accept="application/pdf" required>
             </div>
             <div class="form-group">
-                <label for="position">Page Number Position</label>
+                <label for="position">@lang('messages.pageNumberPosition')</label>
                 <select id="position" name="position">
-                    <option value="bottom-center">Bottom Center</option>
-                    <option value="bottom-right">Bottom Right</option>
-                    <option value="bottom-left">Bottom Left</option>
-                    <option value="top-center">Top Center</option>
-                    <option value="top-right">Top Right</option>
-                    <option value="top-left">Top Left</option>
+                    <option value="bottom-center">@lang('messages.bottomCenter')</option>
+                    <option value="bottom-right">@lang('messages.bottomRight')</option>
+                    <option value="bottom-left">@lang('messages.bottomLeft')</option>
+                    <option value="top-center">@lang('messages.topCenter')</option>
+                    <option value="top-right">@lang('messages.topRight')</option>
+                    <option value="top-left">@lang('messages.topLeft')</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="start_number">Starting Number</label>
+                <label for="start_number">@lang('messages.startingNumber')</label>
                 <input type="number" id="start_number" name="start_number" min="1" value="1">
             </div>
         `,
         create: `
             <div class="form-group">
-                <label for="create_title">Document Title</label>
-                <input type="text" id="create_title" name="title" class="form-control" placeholder="Enter the document title" required >
-                <small>The title that will appear at the top of your PDF</small>
+                <label for="create_title">@lang('messages.documentTitle')</label>
+                <input type="text" id="create_title" name="title" class="form-control" placeholder="@lang('messages.enterDocumentTitle')" required >
+                <small>@lang('messages.titleHelp')</small>
             </div>
             <div class="form-group">
-                <label for="create_content">Content</label>
-                <textarea id="create_content" name="content" class="form-control" rows="6" placeholder="Type the body of your PDF here" required ></textarea>
-                <small>Main text/content of your new PDF</small>
+                <label for="create_content">@lang('messages.content')</label>
+                <textarea id="create_content" name="content" class="form-control" rows="6" placeholder="@lang('messages.typeBodyOfPdfHere')" required ></textarea>
+                <small>@lang('messages.contentHelp')</small>
             </div>
-            <button type="button" id="btn-fill-content" class="fill-btn"> Fill with Test Text </button>
+            <button type="button" id="btn-fill-content" class="fill-btn">@lang('messages.fillWithTestText')</button>
             <div class="form-group">
-                <label for="create_orientation">Page Orientation</label>
+                <label for="create_orientation">@lang('messages.pageOrientation')</label>
                 <select id="create_orientation" name="orientation" class="form-control" >
-                    <option value="portrait">Portrait</option>
-                    <option value="landscape">Landscape</option>
+                    <option value="portrait">@lang('messages.portrait')</option>
+                    <option value="landscape">@lang('messages.landscape')</option>
                 </select>
-                <small>Choose portrait or landscape layout</small>
+                <small>@lang('messages.choosePortraitOrLandscape')</small>
             </div>
         `,
         addWatermark: `
             <div class="form-group">
-                <label for="watermark_pdf">PDF File to Watermark</label>
+                <label for="watermark_pdf">@lang('messages.pdfFileToWatermark')</label>
                 <input type="file" id="watermark_pdf" name="pdf" accept="application/pdf" required >
-                <small>Select the PDF you want to add a watermark to</small>
+                <small>@lang('messages.selectPdfToAddWatermark')</small>
             </div>
             <div class="form-group">
-                <label for="watermark_text">Watermark Text</label>
-                <input type="text" id="watermark_text" name="text" placeholder="Enter watermark text" required maxlength="100">
-                <small>Enter the text that will be overlaid on each page</small>
+                <label for="watermark_text">@lang('messages.watermarkText')</label>
+                <input type="text" id="watermark_text" name="text" placeholder="@lang('messages.enterWatermarkText')" required maxlength="100">
+                <small>@lang('messages.watermarkTextHelp')</small>
                 </div>
             `
-        };
+    };
 
     function renderInputs(action) {
         inputsArea.innerHTML = inputTemplates[action];
@@ -259,11 +259,11 @@
                 Laboris cupidatat do dolore nisi elit qui aute sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
 
                 Ea deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
-                
+
                 Nulla sit excepteur occaecat magna velit. Officia do velit pariatur cillum. Et consectetur nulla sint elit adipisicing anim cillum voluptate laboris excepteur est ce sint adipisicing fugiat commodo. Elit esse dolore veniam mollit. Sunt anim eiusmod qui tempor ea enim nostrud. Esse duis pariatur fugiat quis ullamco tempor excepteur mollit do esse amet. Ea irure elit sunt ex magna labore. Dolore irure officia eiusmod incididunt exercitation eu ea dolor laborum anim. Nulla occaecat cillum officia amet quis.
 
                 Lit qui aute nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint. Creatur nasca pes deserunt nulla eu minim cillum cupidatat. Non ea occaecat commodo aliquip non ipsum dolore irure. Pariatur sit commodo ex mollit adipisicing labore esse excepteur esse voluptate esse aliqua. Ex eu deserunt laborum cupidatat. Labore tempor Lorem aute exercitation aute. Aliquip esse occaecat incididunt adipisicing nulla sunt incididunt dolore qui labore. Eu voluptate incididunt cupidatat eu ea consectetur reprehenderit officia velit quis tempor mollit exercitation. Fugiat et id elit exercitation dolor elit. Enim commodo veniam velit ipsum aliqua cupidatat aliqua culpa ex commodo anim eiusmod sit dolore. Reprehenderit mollit in ullamco sint quis dolor enim sint.
-                
+
                 Ut laborum enim qui ullamco enim adipisicing magna nostrud deserunt. Sunt fugiat nostrud mollit proident in pariatur magna ex. Minim labore nostrud do cupidatat ut ullamco ex aute quis laboris quis deserunt aute laborum. Consectetur qui id pariatur est aliqua. Aliquip exercitation officia reprehenderit dolore non cillum eu laborum elit. Voluptate tempor irure sint fugiat ex quis culpa aliquip irure ex anim deserunt ipsum. Elit incididunt deserunt minim esse consectetur qui est labore pariatur nostrud ea.
 
                 Nostrud duis adipisicing officia irure amet nisi nulla dolor deserunt. Cillum veniam irure cillum enim commodo anim cillum. Elit magna magna id amet laboris do est nulla in. Exercitation in dolor cupidatat ut sunt veniam eu laborum id deserunt. Qui labore ullamco exercitation ut incididunt dolore commodo aliqua do. Occaecat culpa dolor amet sunt dolore adipisicing elit amet et sunt quis Lorem. Proident irure ipsum labore consequat aute ex proident commodo ipsum. Proident non consequat est ut fugiat culpa consequat ad officia cillum commodo in quis consectetur. Id fugiat pariatur reprehenderit ea ut dolore voluptate quis elit. Qui ex excepteur amet do aliquip qui incididunt culpa duis laboris elit nisi sint occaecat. Esse aute ipsum Lorem velit. Ullamco Lorem ullamco labore ullamco pariatur consectetur laboris et incididunt ea.
@@ -330,22 +330,22 @@
             if (action == "split") {
                 document.getElementById('output').innerHTML =
                 `<div class="output">
-                    <a href="${data.processed_files[0]}" class="download-btn" download>Stiahnuť prvú časť PDF</a>
-                    <a href="${data.processed_files[1]}" class="download-btn" download>Stiahnuť druhú časť PDF</a>
+                    <a href="${data.processed_files[0]}" class="download-btn" download>@lang('messages.downloadFirstPart')</a>
+                    <a href="${data.processed_files[1]}" class="download-btn" download>@lang('messages.downloadSecondPart')</a>
                 </div>`;
             } else {
                 document.getElementById('output').innerHTML =
                 `<div class="output">
-                    <a href="${data.processed_file}" class="download-btn" download>Stiahnuť PDF</a>
+                    <a href="${data.processed_file}" class="download-btn" download>@lang('messages.downloadPdf')</a>
                 </div>`;
             }
         } else {
             document.getElementById('output').innerHTML =
-            `<div class="output" style="background-color: #dc3545;">Chyba: ${data.message ?? 'Neznáma chyba'}</div>`;
+            `<div class="output" style="background-color: #dc3545;">@lang('messages.error') ${data.message ?? '@lang('messages.unknownError')'}</div>`;
         }
         } else {
         document.getElementById('output').innerHTML =
-            `<div class="output" style="background-color: #dc3545;">(Chyba: ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}</div>`;
+            `<div class="output" style="background-color: #dc3545;">(@lang('messages.error') ${response.status}) ${data.cleanError ?? ""}${data.message ?? ""}</div>`;
         }
     });
 

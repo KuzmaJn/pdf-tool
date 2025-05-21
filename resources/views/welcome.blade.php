@@ -41,24 +41,25 @@
 
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md mx-auto flex flex-col items-center justify-center">
+        <x-language-switcher />
         <div class="text-center">
             <h2 id="heading">MyAB PDF</h2>
-            <p id="subheading">Your favourite PDF tools</p>
+            <p id="subheading">{{ __('messages.slogan') }}</p>
         </div>
         @if (Route::has('login'))
             <div class="flex flex-row items-center justify-center gap-4 w-full">
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="w-full">
-                        <x-primary-button class="w-full text-lg py-3">Dashboard</x-primary-button>
+                    <a href="{{ url('/pdf-tools') }}" class="w-full">
+                        <x-primary-button class="w-full text-lg py-3">{{ __('messages.tools') }}</x-primary-button>
                     </a>
                 @else
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}">
-                            <x-secondary-button class="text-lg py-3 px-8">Register</x-secondary-button>
+                            <x-secondary-button class="text-lg py-3 px-8">{{ __('messages.register') }}</x-secondary-button>
                         </a>
                     @endif
                     <a href="{{ route('login') }}">
-                        <x-primary-button class="text-lg py-3 px-8">Log in</x-primary-button>
+                        <x-primary-button class="text-lg py-3 px-8">{{ __('messages.login') }}</x-primary-button>
                     </a>
                 @endauth
             </div>

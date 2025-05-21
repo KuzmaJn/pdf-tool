@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('History') }}
+            {{ __('messages.history') }}
         </h2>
     </x-slot>
 
@@ -15,17 +15,17 @@
                       class="px-2">
                     @csrf
                     <x-primary-button>
-                        {{ __('Export to CSV') }}
+                        {{ __('messages.exportToCSV') }}
                     </x-primary-button>
                 </form>
                 <form method="POST"
                       action="{{ route('history.destroyAll') }}"
                       class=""
-                      onsubmit="return confirm('Are you sure you want to delete all history records?');">
+                      onsubmit="return confirm('{{ __('messages.deleteAllConfirm') }}');">
                     @csrf
                     @method('DELETE')
                     <x-danger-button>
-                        {{ __('Delete All') }}
+                        {{ __('messages.deleteAll') }}
                     </x-danger-button>
                 </form>
             </div>
@@ -36,12 +36,12 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Service ID</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Interface</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Used At</th>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.id') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.user') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.serviceId') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.interface') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.usedAt') }}</th>
+                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">{{ __('messages.location') }}</th>
                         </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -56,7 +56,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="px-4 py-2 text-center text-gray-500">No history records found.</td>
+                                <td colspan="7" class="px-4 py-2 text-center text-gray-500">{{ __('messages.noHistoryRecords') }}</td>
                             </tr>
                         @endforelse
                         </tbody>

@@ -2,10 +2,10 @@
 <section class="space-y-6" x-data="apiKeys()" x-init="init()">
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('API kľúče') }}
+            {{ __('messages.apiKeysTitle') }}
         </h2>
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Tu môžeš vytvoriť, zobraziť a odstrániť svoje API kľúče.') }}
+            {{ __('messages.apiKeysDesc') }}
         </p>
     </header>
 
@@ -16,54 +16,54 @@
                 <div>
                     <p class="font-semibold text-indigo-600" x-text="key.name"></p>
                     <p class="text-sm text-gray-500">
-                        {{ __('Platné do:') }}
-                        <span x-text="key.expires_at ? new Date(key.expires_at).toLocaleString() : '{{ __('Nikdy') }}'"></span>
+                        {{ __('messages.apiKeyExpires') }}
+                        <span x-text="key.expires_at ? new Date(key.expires_at).toLocaleString() : '{{ __('messages.never') }}'"></span>
                     </p>
                 </div>
                 <button
                     @click="deleteKey(key.id)"
                     class="text-red-600 hover:text-red-800 text-sm"
                 >
-                    {{ __('Odstrániť') }}
+                    {{ __('messages.delete') }}
                 </button>
             </div>
         </template>
         <div x-show="keys.length === 0" class="text-gray-500">
-            {{ __('Zatiaľ nemáš žiadne API kľúče.') }}
+            {{ __('messages.noApiKeys') }}
         </div>
     </div>
 
     {{-- Formulár na nový kľúč --}}
     <form @submit.prevent="createKey()" class="mt-6 space-y-6">
         <div>
-            <x-input-label for="api_key_name" :value="__('Názov kľúča')" />
+            <x-input-label for="api_key_name" :value="__('messages.keyName')" />
             <x-text-input
                 id="api_key_name"
                 x-model="newName"
                 type="text"
                 class="mt-1 block w-full"
-                placeholder="{{ __('Môj nový kľúč') }}"
+                placeholder="{{ __('messages.myNewKey') }}"
             />
         </div>
 
         <div>
-            <x-input-label for="api_key_expires" :value="__('Platnosť kľúča')" />
+            <x-input-label for="api_key_expires" :value="__('messages.keyExpires')" />
             <select
                 id="api_key_expires"
                 x-model.number="newExpires"
                 class="mt-1 block w-full border-gray-300 rounded-md"
             >
-                <option value="60">{{ __('1 hodina') }}</option>
-                <option value="1440">{{ __('1 deň') }}</option>
-                <option value="10080">{{ __('1 týždeň') }}</option>
-                <option value="43200">{{ __('1 mesiac') }}</option>
-                <option value="">{{ __('Nikdy') }}</option>
+                <option value="60">{{ __('messages.1hour') }}</option>
+                <option value="1440">{{ __('messages.1day') }}</option>
+                <option value="10080">{{ __('messages.1week') }}</option>
+                <option value="43200">{{ __('messages.1month') }}</option>
+                <option value="">{{ __('messages.never') }}</option>
             </select>
         </div>
 
         <div class="flex items-center gap-4">
             <x-primary-button type="submit">
-                {{ __('Vytvoriť kľúč') }}
+                {{ __('messages.createKey') }}
             </x-primary-button>
             <template x-if="plainText">
                 <p class="text-sm text-gray-600 break-all" x-text="plainText"></p>
@@ -79,7 +79,7 @@
         style="display: none;"
     >
         <div class="bg-white p-6 rounded shadow max-w-sm w-auto">
-            <h3 class="text-lg font-semibold mb-2">{{ __('Tvoj nový API kľúč') }}</h3>
+            <h3 class="text-lg font-semibold mb-2">{{ __('messages.yourNewApiKey') }}</h3>
             <template x-if="modalText">
                 <div class="flex items-center space-x-2">
                     <span class="break-all text-gray-700 text-sm" x-text="modalText.split('|')[1] ?? modalText"></span>
@@ -98,7 +98,7 @@
                 </div>
             </template>
             <x-secondary-button class="mt-4 px-4 py-2" @click="showModal = false">
-                {{ __('Zavrieť') }}
+                {{ __('messages.close') }}
             </x-secondary-button>
         </div>
     </div>
@@ -131,7 +131,7 @@
             },
 
             async deleteKey(id) {
-                if (!confirm('{{ __('Naozaj zmazať tento kľúč?') }}')) return;
+                if (!confirm('{{ __('messages.reallyDeleteKey') }}')) return;
                 await fetch(`/api-keys/${id}`, {
                     method: 'DELETE',
                     headers: {

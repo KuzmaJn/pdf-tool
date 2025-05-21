@@ -73,8 +73,6 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-Route::get('/pdf-tools', [PdfToolsController::class, 'index'])->name('pdf.tools');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -112,3 +110,10 @@ Route::middleware(['auth', 'admin'])->prefix('history')->group(function () {
     Route::post('/export', [HistoryController::class, 'export'])->name('history.export');
     Route::delete('/destroy-all', [HistoryController::class, 'destroyAll'])->name('history.destroyAll');
 });
+
+//use App\Http\Controllers\LanguageController;
+//
+//Route::get('/language/{locale}', [LanguageController::class, 'switch'])->name('language.switch');
+use App\Http\Controllers\LanguageController;
+
+Route::post('/language-switch', [LanguageController::class, 'switch'])->name('language.switch');
