@@ -33,6 +33,7 @@ Nainštaluj závislosti
 Spusti migrácie a seedy
 ```
 ./vendor/bin/sail artisan migrate
+./vendor/bin/sail artisan storage:link    # link na ukladanie vytvorenie tmp suborov
 ./vendor/bin/sail artisan db:seed         # ak používaš seedy
 ```
 
