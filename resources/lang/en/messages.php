@@ -280,5 +280,6 @@ return [
     'viewApiHistory' => 'View API call history',
     'deleteAllHistory' => 'Delete all history',
     'exportToCsv' => 'Export records to CSV format',
+    'usermanual' => 'User manual',
 
 ];

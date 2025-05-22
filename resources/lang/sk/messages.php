@@ -284,4 +284,6 @@ return [
     'viewApiHistory' => 'Prezerať históriu API volaní',
     'deleteAllHistory' => 'Mazať celu históriu',
     'exportToCsv' => 'Exportovať záznamy do CSV formátu',
+    'usermanual' => 'Použivateľská príručka',
+
 ];

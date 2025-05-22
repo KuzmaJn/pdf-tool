@@ -1,7 +1,11 @@
 <x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('messages.usermanual') }}
+        </h2>
+    </x-slot>
     <div class="container manual-container">
 
-        <h1 class="manual-title">Používateľská príručka - MyABe-PDF</h1>
         <div class="manual-actions">
             <a href="{{ route('manual.download') }}" class="download-btn btn-primary">
                 <i class="fas fa-file-pdf"></i> Stiahnuť PDF verziu
