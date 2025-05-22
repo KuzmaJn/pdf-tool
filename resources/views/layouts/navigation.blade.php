@@ -18,6 +18,12 @@
                     <x-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
                         {{ __('messages.userManual') }}
                     </x-nav-link>
+                    <x-nav-link
+                        :href="route('docs')"
+                        :active="request()->routeIs('docs')"
+                    >
+                        {{ __('API docs') }}
+                    </x-nav-link>
                     @if (Auth::user()->is_admin)
                         <x-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
                         {{ __('messages.history') }}
