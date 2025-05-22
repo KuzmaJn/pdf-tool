@@ -16,10 +16,17 @@ class UserManualController extends Controller
     }
     public function downloadPdf()
     {
-        $pdf = Pdf::loadView('manual.pdf', [
-            'title' => 'Používateľská príručka - IGA GUI'
-        ]);
+        // 1. Nahraj view s dátami (napr. preklady)
+        $data = [
+            // sem môžeš poslať dynamické údaje, napr. now() atď.
+            'updatedAt' => now()->format('d.m.Y'),
+        ];
 
-        return $pdf->download('používateľská-príručka-iga-gui.pdf');
+        // 2. Vygeneruj PDF
+        $pdf = PDF::loadView('manual.pdf', $data)
+            ->setPaper('a4', 'portrait');
+
+        // 3. Vráť response na stiahnutie
+        return $pdf->download('user-manual-'.$data['updatedAt'].'.pdf');
     }
 }
