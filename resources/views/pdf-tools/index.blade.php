@@ -35,13 +35,13 @@
         width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;
         box-sizing: border-box;
     }
-    button[type="submit"]:disabled { background: #aaa; cursor: not-allowed; }
-    button[type="submit"] {
+    button[type="submit"]:disabled.my-button { background: #aaa; cursor: not-allowed; }
+    button[type="submit"].my-button {
         background: #1976d2; color: #fff; border: none; padding: 12px 24px;
         border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
         transition: background 0.2s;
     }
-    button[type="submit"]:hover { background: #1565c0; }
+    button[type="submit"]:hover.my-button { background: #1565c0; }
     .output { margin-top: 24px; padding: 16px; background: #e8f5e9; border-radius: 6px; text-align: center; }
     .download-btn {
         background: #388e3c; color: #fff; border: none; padding: 10px 20px;
@@ -149,7 +149,7 @@
         <div id="inputsArea">
             <!-- Dynamic inputs will appear here -->
         </div>
-        <button type="submit" id="submitBtn" disabled>
+        <button type="submit" class="my-button" id="submitBtn" disabled>
             <span id="processText">{{ __('messages.process') }}</span>
         </button>
     </form>

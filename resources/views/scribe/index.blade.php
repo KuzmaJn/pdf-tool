@@ -58,7 +58,7 @@
     <div id="toc">
         <li class="tocify-item level-1 back-link">
             <a href="{{ route('pdf.tools') }}" class="text-blue-600 hover:underline">
-                ← Back to PDF-tools
+                ← back to MyAB PDF
             </a>
         </li>
                     <ul id="tocify-header-introduction" class="tocify-header">

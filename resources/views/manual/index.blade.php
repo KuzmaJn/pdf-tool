@@ -7,7 +7,7 @@
     <div class="container manual-container">
 
         <div class="manual-actions">
-            <a href="{{ route('manual.download') }}" class="download-btn btn-primary">
+            <a href="{{ route('manual.download') }}" class="my-button">
                 <i class="fas fa-file-pdf"></i> Stiahnuť PDF verziu
 
             </a>
@@ -19,7 +19,7 @@
                 <li><a href="#uvod">{{ __('messages.introduction') }}</a></li>
                 <li><a href="#registracia">{{ __('messages.registration_login') }}</a></li>
                 <li><a href="#zakladne-operacie">{{ __('messages.basic_operations') }}</a>
-                    <ol>
+                    <ol class="pl-5">
                         <li><a href="#merge">{{ __('messages.merge_pdf') }}</a></li>
                         <li><a href="#split">{{ __('messages.split_pdf') }}</a></li>
                         <li><a href="#unlock">{{ __('messages.unlock_pdf') }}</a></li>
@@ -28,7 +28,7 @@
                     </ol>
                 </li>
                 <li><a href="#pokrocile-funkcie">{{ __('messages.advanced_features') }}</a>
-                    <ol>
+                    <ol class="pl-5">
                         <li><a href="#extract">{{ __('messages.extract_page') }}</a></li>
                         <li><a href="#pagenumber">{{ __('messages.add_page_numbers') }}</a></li>
                         <li><a href="#create">{{ __('messages.create_pdf') }}</a></li>
@@ -51,14 +51,14 @@
             <section id="registracia" class="manual-section">
                 <h2>2. {{ __('messages.registration_login') }}</h2>
                 <h3>2.1 {{ __('messages.registration') }}</h3>
-                <ol>
+                <ol class="pl-5">
                     <li>{{ __('messages.reg_step1') }}</li>
                     <li>{{ __('messages.reg_step2') }}</li>
                     <li>{{ __('messages.reg_step3') }}</li>
                 </ol>
 
                 <h3>2.2 {{ __('messages.login') }}</h3>
-                <ol>
+                <ol class="pl-5">
                     <li>{{ __('messages.login_step1') }}</li>
                     <li>{{ __('messages.login_step2') }}</li>
                 </ol>
@@ -69,7 +69,7 @@
 
                 <article id="merge" class="operation-guide">
                     <h3>3.1 {{ __('messages.merge_pdf') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.merge_step1') }}</li>
                         <li>{{ __('messages.merge_step2') }}</li>
                         <li>{{ __('messages.merge_step3') }}</li>
@@ -80,11 +80,11 @@
 
                 <article id="split" class="operation-guide">
                     <h3>3.2 {{ __('messages.split_pdf') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.split_step1') }}</li>
                         <li>{{ __('messages.split_step2') }}</li>
                         <li>{{ __('messages.split_step3') }}:
-                            <ul>
+                            <ul class="pl-5">
                                 <li><strong>{{ __('messages.split_option1') }}</strong> - {{ __('messages.split_option1_desc') }}</li>
                                 <li><strong>{{ __('messages.split_option2') }}</strong> - {{ __('messages.split_option2_desc') }}</li>
                             </ul>
@@ -95,7 +95,7 @@
 
                 <article id="unlock" class="operation-guide">
                     <h3>3.3 {{ __('messages.unlock_pdf') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.unlock_step1') }}</li>
                         <li>{{ __('messages.unlock_step2') }}</li>
                         <li>{{ __('messages.unlock_step3') }}</li>
@@ -108,7 +108,7 @@
 
                 <article id="rotate" class="operation-guide">
                     <h3>3.4 {{ __('messages.rotate_page') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.rotate_step1') }}</li>
                         <li>{{ __('messages.rotate_step2') }}</li>
                         <li>{{ __('messages.rotate_step3') }}</li>
@@ -119,7 +119,7 @@
 
                 <article id="remove" class="operation-guide">
                     <h3>3.5 {{ __('messages.remove_page') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.remove_step1') }}</li>
                         <li>{{ __('messages.remove_step2') }}</li>
                         <li>{{ __('messages.remove_step3') }}</li>
@@ -133,7 +133,7 @@
 
                 <article id="extract" class="operation-guide">
                     <h3>4.1 {{ __('messages.extract_page') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.extract_step1') }}</li>
                         <li>{{ __('messages.extract_step2') }}</li>
                         <li>{{ __('messages.extract_step3') }}</li>
@@ -143,7 +143,7 @@
 
                 <article id="pagenumber" class="operation-guide">
                     <h3>4.2 {{ __('messages.add_page_numbers') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.pagenumber_step1') }}</li>
                         <li>{{ __('messages.pagenumber_step2') }}</li>
                         <li>{{ __('messages.pagenumber_step3') }}</li>
@@ -154,7 +154,7 @@
 
                 <article id="create" class="operation-guide">
                     <h3>4.3 {{ __('messages.create_pdf') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.create_step1') }}</li>
                         <li>{{ __('messages.create_step2') }}</li>
                         <li>{{ __('messages.create_step3') }}</li>
@@ -164,7 +164,7 @@
 
                 <article id="pdf2word" class="operation-guide">
                     <h3>4.4 {{ __('messages.pdf_to_word') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.pdf2word_step1') }}</li>
                         <li>{{ __('messages.pdf2word_step2') }}</li>
                         <li>{{ __('messages.pdf2word_step3') }}</li>
@@ -177,7 +177,7 @@
 
                 <article id="jpg2pdf" class="operation-guide">
                     <h3>4.5 {{ __('messages.jpg_to_pdf') }}</h3>
-                    <ol>
+                    <ol class="pl-5">
                         <li>{{ __('messages.jpg2pdf_step1') }}</li>
                         <li>{{ __('messages.jpg2pdf_step2') }}</li>
                         <li>{{ __('messages.jpg2pdf_step3') }}</li>
@@ -190,7 +190,7 @@
             <section id="admin" class="manual-section">
                 <h2>5. {{ __('messages.admin_mode') }}</h2>
                 <p>{{ __('messages.admin_access') }}</p>
-                <ul>
+                <ul class="pl-5">
                     <li>{{ __('messages.admin_feature1') }}</li>
                     <li>{{ __('messages.admin_feature2') }}</li>
                     <li>{{ __('messages.admin_feature3') }}</li>
@@ -256,19 +256,17 @@
             font-size: 0.9em;
         }
 
-        ol, ul {
+        .pl-5 {
             padding-left: 20px;
         }
 
-        .download-btn {
+        .my-button:disabled { background: #aaa; cursor: not-allowed; }
+        .my-button {
             background: #1976d2; color: #fff; border: none; padding: 12px 24px;
             border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: bold;
             transition: background 0.2s;
         }
-
-        .download-btn:hover {
-            background: #155a8a;
-        }
+        .my-button:hover { background: #1565c0; }
     </style>
 
 </x-app-layout>
