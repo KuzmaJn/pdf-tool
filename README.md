@@ -41,3 +41,8 @@ Pristup k aplikácii
 Otvor v prehliadači:
 
 http://localhost
+
+
+## Disclaimer
+
+Na prihlasovací formulár sme použili open source starter kit dostupný na [Laravel Docs](https://laravel.com/docs/11.x/starter-kits)
