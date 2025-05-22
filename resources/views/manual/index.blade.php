@@ -210,12 +210,6 @@
             position: relative;
         }
 
-        .language-switcher {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-        }
-
         .language-switcher .active {
             background-color: #3490dc;
             color: white;

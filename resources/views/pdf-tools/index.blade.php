@@ -133,8 +133,8 @@
     <div class="tiles">
         <div class="tile active" data-action="merge">{{ __('messages.mergePdf') }}</div>
         <div class="tile" data-action="split">{{ __('messages.splitPdf') }}</div>
-        <div class="tile" data-action="unlock">{{ __('messages.unlockPdf') }}</div>
         <div class="tile" data-action="lock">{{ __('messages.lockPdf') }}</div>
+        <div class="tile" data-action="unlock">{{ __('messages.unlockPdf') }}</div>
         <div class="tile" data-action="rotate">{{ __('messages.rotatePage') }}</div>
         <div class="tile" data-action="removePage">{{ __('messages.removePage') }}</div>
         <div class="tile" data-action="extractPage">{{ __('messages.extractPage') }}</div>
@@ -216,6 +216,7 @@
                 <input type="password" id="password" name="password" required>
             </div>
         `,
+
         rotate: `
             <div class="form-group">
                 <label for="pdf">@lang('messages.pdfFileToRotate')</label>

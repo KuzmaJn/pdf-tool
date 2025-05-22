@@ -95,6 +95,10 @@
             <x-responsive-nav-link :href="route('manual')" :active="request()->routeIs('manual')">
                 {{ __('messages.userManual') }}
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('docs')"
+                                   :active="request()->routeIs('docs')">
+                {{ __('API docs') }}
+            </x-responsive-nav-link>
             @if (Auth::user()->is_admin)
                 <x-responsive-nav-link :href="route('history.index')" :active="request()->routeIs('history.index')">
                     {{ __('messages.history') }}
