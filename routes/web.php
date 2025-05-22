@@ -67,6 +67,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/api-keys', [ApiKeyController::class,'index']);
     Route::post('/api-keys', [ApiKeyController::class,'store']);
     Route::delete('/api-keys/{id}', [ApiKeyController::class,'destroy']);
+
+    Route::get('/docs', fn() => view('scribe.index'))
+    ->name('docs');
 });
 
 // PDF tools (public variant)

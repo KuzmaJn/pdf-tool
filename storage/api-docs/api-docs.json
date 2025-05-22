@@ -2,8 +2,8 @@
     "openapi": "3.0.0",
     "info": {
         "title": "PDF Tools API",
-        "description": "API na manipuláciu s PDF súbormi (merge, split, unlock, lock, rotate, removePage, extractPage, numberPages, create, addWatermark).",
-        "version": "1.0.0"
+        "version": "1.0.0",
+        "description": "API na manipuláciu s PDF súbormi (merge, split, unlock, lock, rotate, removePage, extractPage, numberPages, create, addWatermark)."
     },
     "servers": [
         {
@@ -33,25 +33,36 @@
     "paths": {
         "/api/pdf/merge": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Zlúči viacero PDF súborov do jedného",
-                "description": "Vstup: Pole PDF súborov. Výstup: Zlúčený PDF súbor.",
+                "description": "Pole PDF súborov na zlúčenie (vyber viaceré súbory naraz).",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf_files"],
+                                "type": "object",
+                                "required": [
+                                    "pdf_files"
+                                ],
                                 "properties": {
                                     "pdf_files": {
                                         "type": "array",
+                                        "description": "Pole PDF súborov na zlúčenie",
                                         "items": {
                                             "type": "string",
                                             "format": "binary"
                                         }
                                     }
-                                },
-                                "type": "object"
+                                }
+                            },
+                            "encoding": {
+                                "pdf_files": {
+                                    "style": "form",
+                                    "explode": true
+                                }
                             }
                         }
                     }
@@ -62,6 +73,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -71,8 +83,33 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/merged_1234.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Chyba validácie (menej než 2 súbory)",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "pdf_files": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -82,6 +119,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -95,8 +133,7 @@
                                             "type": "string",
                                             "example": "Python error..."
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -106,15 +143,21 @@
         },
         "/api/pdf/split": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Rozdelí PDF na dve časti podľa čísla strany",
-                "description": "Vstup: PDF súbor + číslo strany pre rozdelenie. Výstup: Dva PDF súbory.",
+                "description": "Vstup: PDF súbor + číslo strany pre rozdelenie.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "split_page"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "split_page"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -124,8 +167,7 @@
                                         "type": "integer",
                                         "example": 2
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -136,6 +178,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -148,8 +191,7 @@
                                                 "example": "http://localhost/storage/output/split1_1234.pdf"
                                             }
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -159,15 +201,21 @@
         },
         "/api/pdf/unlock": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Odomkne heslom chránené PDF",
-                "description": "Vstup: PDF súbor + heslo. Výstup: Odomknutý PDF súbor.",
+                "description": "Vstup: PDF súbor + heslo.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "password"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "password"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -177,8 +225,7 @@
                                         "type": "string",
                                         "example": "moje_heslo"
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -189,6 +236,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -198,8 +246,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/unlocked_1234.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -209,15 +256,21 @@
         },
         "/api/pdf/lock": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Zahesluje PDF súbor",
-                "description": "Vstup: PDF súbor + heslo. Výstup: Zaheslovaný PDF súbor.",
+                "description": "Vstup: PDF súbor + heslo.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "password"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "password"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -227,8 +280,7 @@
                                         "type": "string",
                                         "example": "tajne_heslo"
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -239,6 +291,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -248,8 +301,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/locked_123.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -259,6 +311,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -272,8 +325,7 @@
                                             "type": "string",
                                             "example": "Python error..."
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -283,15 +335,22 @@
         },
         "/api/pdf/rotate": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Otočí konkrétnu stranu v PDF",
-                "description": "Vstup: PDF súbor + číslo strany + uhol (90, 180, 270). Výstup: Upravený PDF súbor.",
+                "description": "Vstup: PDF súbor + číslo strany + uhol (90,180,270).",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "page_number", "rotation_angle"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "page_number",
+                                    "rotation_angle"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -303,11 +362,14 @@
                                     },
                                     "rotation_angle": {
                                         "type": "integer",
-                                        "enum": [90, 180, 270],
+                                        "enum": [
+                                            90,
+                                            180,
+                                            270
+                                        ],
                                         "example": 90
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -318,6 +380,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -327,8 +390,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/rotated_1234.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -338,15 +400,21 @@
         },
         "/api/pdf/removePage": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Odstráni konkrétnu stranu z PDF",
-                "description": "Vstup: PDF súbor + číslo strany. Výstup: PDF bez odstránenej strany.",
+                "description": "Vstup: PDF súbor + číslo strany.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "page_number"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "page_number"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -356,8 +424,7 @@
                                         "type": "integer",
                                         "example": 3
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -368,6 +435,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -377,8 +445,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/removed_123.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -388,15 +455,21 @@
         },
         "/api/pdf/extractPage": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Extrahuje konkrétnu stranu z PDF",
-                "description": "Vytvorí nový PDF súbor obsahujúci iba zvolenú stranu z originálneho dokumentu.",
+                "description": "Vstup: PDF súbor + číslo strany.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "page_number"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "page_number"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -407,8 +480,7 @@
                                         "minimum": 1,
                                         "example": 1
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -419,6 +491,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -428,8 +501,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/extracted_123.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -439,6 +511,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -452,8 +525,7 @@
                                             "type": "string",
                                             "example": "Page number out of range"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -463,14 +535,21 @@
         },
         "/api/pdf/numberPages": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Pridá číslovanie strán do PDF",
+                "description": "Vstup: PDF súbor + pozícia + (voliteľné) začiatok číslovania.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "position"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "position"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -491,18 +570,18 @@
                                         "type": "integer",
                                         "minimum": 1
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
                 },
                 "responses": {
                     "200": {
-                        "description": "Success",
+                        "description": "Číslovanie úspešné",
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -511,8 +590,7 @@
                                         "processed_file": {
                                             "type": "string"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -522,15 +600,22 @@
         },
         "/api/pdf/create": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Vytvorí nový PDF súbor z textového obsahu",
-                "description": "Generuje PDF súbor na základe zadaného titulu, obsahu a orientácie.",
+                "description": "Vstup: title, content, orientation.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["title", "content", "orientation"],
+                                "type": "object",
+                                "required": [
+                                    "title",
+                                    "content",
+                                    "orientation"
+                                ],
                                 "properties": {
                                     "title": {
                                         "type": "string",
@@ -543,11 +628,13 @@
                                     },
                                     "orientation": {
                                         "type": "string",
-                                        "enum": ["portrait", "landscape"],
+                                        "enum": [
+                                            "portrait",
+                                            "landscape"
+                                        ],
                                         "example": "portrait"
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -558,6 +645,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -567,8 +655,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/generated_123.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -578,6 +665,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -591,8 +679,7 @@
                                             "type": "string",
                                             "example": "Python error output..."
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
@@ -602,15 +689,21 @@
         },
         "/api/pdf/addWatermark": {
             "post": {
-                "tags": ["PDF Tools"],
+                "tags": [
+                    "PDF Tools"
+                ],
                 "summary": "Pridá textový watermark do PDF",
-                "description": "Vstup: PDF súbor + text watermarku. Výstup: PDF s watermarkom.",
+                "description": "Vstup: PDF súbor + text watermarku.",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "multipart/form-data": {
                             "schema": {
-                                "required": ["pdf", "text"],
+                                "type": "object",
+                                "required": [
+                                    "pdf",
+                                    "text"
+                                ],
                                 "properties": {
                                     "pdf": {
                                         "type": "string",
@@ -620,8 +713,7 @@
                                         "type": "string",
                                         "example": "DÔVERNÉ"
                                     }
-                                },
-                                "type": "object"
+                                }
                             }
                         }
                     }
@@ -632,6 +724,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "type": "object",
                                     "properties": {
                                         "status": {
                                             "type": "string",
@@ -641,8 +734,7 @@
                                             "type": "string",
                                             "example": "http://localhost/storage/output/watermarked_123.pdf"
                                         }
-                                    },
-                                    "type": "object"
+                                    }
                                 }
                             }
                         }
