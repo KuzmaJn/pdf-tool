@@ -72,14 +72,6 @@ Route::middleware('auth')->group(function () {
     ->name('docs');
 });
 
-// PDF tools (public variant)
-
-
-// Dashboard
-Route::get('/dashboard', fn() => view('dashboard'))
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 // History (admin)
 Route::middleware(['auth', 'admin'])->prefix('history')->group(function () {
     Route::get('/', [HistoryController::class, 'index'])->name('history.index');

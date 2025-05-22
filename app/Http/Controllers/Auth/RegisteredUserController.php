@@ -42,8 +42,16 @@ class RegisteredUserController extends Controller
         ]);
 
         event(new Registered($user));
-
         Auth::login($user);
+
+        $user = $request->user();
+        $tokenObj = $user->createToken('secret_web_token');
+        $token = $tokenObj->plainTextToken;
+        $tokenId = $tokenObj->accessToken->id; // získaj ID tokenu
+
+        session()->flash('api_token', $token);
+        session()->flash('api_token_id', $tokenId);
+
 
         return redirect(route('pdf.tools', absolute: false));
     }
