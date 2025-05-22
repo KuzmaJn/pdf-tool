@@ -1,3 +1,4 @@
+# Simple PDF editor developed in Laravel and Python
 ## Ako spustiť Laravel app PDF-tool lokálne?
 
 Nainštaluj Docker a Docker Compose
